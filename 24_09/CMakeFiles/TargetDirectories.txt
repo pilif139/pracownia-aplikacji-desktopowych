@@ -1,0 +1,3 @@
+/Users/filip/programming/pracownia-aplikacji-desktopowych/24_09/CMakeFiles/24_09.dir
+/Users/filip/programming/pracownia-aplikacji-desktopowych/24_09/CMakeFiles/edit_cache.dir
+/Users/filip/programming/pracownia-aplikacji-desktopowych/24_09/CMakeFiles/rebuild_cache.dir
