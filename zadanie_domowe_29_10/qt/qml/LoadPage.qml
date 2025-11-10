@@ -2,7 +2,8 @@ import QtQuick
 import QtQuick.Controls
 
 Item{
-    anchors.fill: parent
+    width: parent
+    height: parent
     Rectangle{
         id: bgRect
         anchors.fill: parent
@@ -11,8 +12,8 @@ Item{
             id: busyIndicator
             anchors.centerIn: parent
             running: true
-            width: 100
-            height: 100
+            width: 50
+            height: 50
         }
     }
 }

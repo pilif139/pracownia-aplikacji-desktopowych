@@ -23,6 +23,7 @@ qt_add_qml_module(zadanie_domowe_29_10
         qt/qml/main.qml
         qt/qml/LoadPage.qml
         qt/qml/MainPage.qml
+        qt/qml/AddTaskDrawer.qml
 )
 
 target_link_libraries(zadanie_domowe_29_10

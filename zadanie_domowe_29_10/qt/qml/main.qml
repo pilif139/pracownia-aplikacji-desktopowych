@@ -10,7 +10,9 @@ ApplicationWindow{
     StackView{
         id: contentFrame
         anchors.fill: parent
-        // instantiate LoadPage from the imported QML module (no full qrc path needed)
-        initialItem: LoadPage { }
+        initialItem: LoadPage {}
+    }
+    Component.onCompleted: {
+        contentFrame.replace("qrc:/zadanie_domowe/qt/qml/MainPage.qml")
     }
 }
