@@ -57,19 +57,20 @@ void InvertDialog::onPreviewUpdated(bool isInverted) {
     if (!fileHandler) return;
     uint8_t **data = fileHandler->imageData();
     if (!data) return;
+
+    if (!isInverted) {
+        fileHandler->restoreOriginal();
+        return;
+    }
+
     const uint f_width = fileHandler->imageWidth();
     const uint f_height = fileHandler->imageHeight();
-
     for (uint y = 0; y < f_height; ++y) {
         for (uint x = 0; x < f_width; ++x) {
             uint idx = x * 3;
-            if (isInverted) {
                 data[y][idx] = 255 - data[y][idx];         // R
                 data[y][idx + 1] = 255 - data[y][idx + 1]; // G
                 data[y][idx + 2] = 255 - data[y][idx + 2]; // B
-            } else {
-                fileHandler->restoreOriginal();
-            }
         }
     }
 }
