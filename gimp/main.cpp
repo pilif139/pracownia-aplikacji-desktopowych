@@ -6,15 +6,14 @@
 int main()
 {
     PPMImage img(200, 200);
-    unsigned char *data = img.getData();
+    auto data = img.getData();
     for (int y = 0; y < img.getHeight(); ++y)
     {
         for (int x = 0; x < img.getWidth(); ++x)
         {
-            int idx = (y * img.getWidth() + x) * 3;
-            data[idx] = x * 255 / img.getWidth();      // R: gradient poziomy
-            data[idx + 1] = y * 255 / img.getHeight(); // G: gradient pionowy
-            data[idx + 2] = 128;                       // B: stała wartość
+            data[y][x * 3] = x * 255 / img.getWidth();      // R: gradient poziomy
+            data[y][x * 3 + 1] = y * 255 / img.getHeight(); // G: gradient pionowy
+            data[y][x * 3 + 2] = 128;                       // B: stała wartość
         }
     }
     if (img.savePPM("test_ascii.ppm"))
@@ -38,22 +37,30 @@ int main()
         std::cout << "Błąd wczytywania test_bin.ppm" << std::endl;
     }
 
-    PBMImage pbm(100,100);
-    bool** pbmData = pbm.getData();
-    for (int y = 0; y < pbm.getHeight(); ++y) {
-        for (int x=0; x < pbm.getWidth(); ++x) {
-            pbmData[y][x] = ((x/3 + y/3) % 2 == 0);
+    PBMImage pbm(100, 100);
+    bool **pbmData = pbm.getData();
+    for (int y = 0; y < pbm.getHeight(); ++y)
+    {
+        for (int x = 0; x < pbm.getWidth(); ++x)
+        {
+            pbmData[y][x] = ((x / 3 + y / 3) % 2 == 0);
         }
     }
-    if (pbm.savePBM("test.pbm")) {
+    if (pbm.savePBM("test.pbm"))
+    {
         std::cout << "Zapisano test.pbm" << std::endl;
-    }else {
-        std::cout<<"Błąd zapisywania test.pbm"<<std::endl;
     }
-    if (pbm.loadPBM("test.pbm")) {
-        std::cout<<"Pomyślnie wczytano test.pbm"<<std::endl;
-    } else {
-        std::cout<<"Błąd wczytywania test.pbm"<<std::endl;
+    else
+    {
+        std::cout << "Błąd zapisywania test.pbm" << std::endl;
+    }
+    if (pbm.loadPBM("test.pbm"))
+    {
+        std::cout << "Pomyślnie wczytano test.pbm" << std::endl;
+    }
+    else
+    {
+        std::cout << "Błąd wczytywania test.pbm" << std::endl;
     }
     return 0;
 }

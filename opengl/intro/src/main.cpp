@@ -102,7 +102,7 @@ int main()
 
     TriangleMesh *triangle = new TriangleMesh();
 
-    unsigned int shader = make_shader("../src/shaders/vertex.txt", "../src/shaders/fragment.txt");
+    unsigned int shader = make_shader("../src/shaders/vertex.glsl", "../src/shaders/fragment.glsl");
 
     while (!glfwWindowShouldClose(window))
     {

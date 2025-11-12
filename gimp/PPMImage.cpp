@@ -4,70 +4,202 @@
 
 PPMImage::PPMImage() : width(0), height(0), maxColorValue(255), data(nullptr) {}
 
-PPMImage::PPMImage(int w, int h, int maxVal) : width(w), height(h), maxColorValue(maxVal) {
-    data = new unsigned char[width * height * 3]();
+PPMImage::PPMImage(int w, int h, int maxVal) : width(w), height(h), maxColorValue(maxVal)
+{
+    data = new unsigned char *[height];
+    for (int i = 0; i < height; ++i)
+    {
+        data[i] = new unsigned char[width * 3]();
+    }
 }
 
-PPMImage::~PPMImage() {
-    delete[] data;
+PPMImage::~PPMImage()
+{
+    if (data)
+    {
+        for (int i = 0; i < height; ++i)
+        {
+            delete[] data[i];
+        }
+        delete[] data;
+        data = nullptr;
+    }
 }
 
-bool PPMImage::loadPPM(const std::string& filename) {
-    std::ifstream file(filename);
-    if (!file.is_open()) return false;
-    std::string line;
-    // Nagłówek
-    std::getline(file, line);
-    if (line != "P3") return false;
-    // Pomijanie komentarzy
-    do { std::getline(file, line); } while (line[0] == '#');
-    std::istringstream iss(line);
-    iss >> width >> height;
-    file >> maxColorValue;
-    data = new unsigned char[width * height * 3];
-    int val, i = 0;
-    while (file >> val) {
-        data[i++] = static_cast<unsigned char>(val);
+static bool isCommentOrEmpty(const std::string &line)
+{
+    for (char c : line)
+    {
+        if (c == '#')
+            return true;
+        if (!isspace(static_cast<unsigned char>(c)))
+            return false;
     }
     return true;
 }
 
-bool PPMImage::savePPM(const std::string& filename) const {
+bool PPMImage::loadPPM(const std::string &filename)
+{
+    std::ifstream file(filename);
+    if (!file.is_open())
+        return false;
+    std::string line;
+
+    std::getline(file, line);
+    if (line != "P3")
+        return false;
+
+    int newWidth = 0, newHeight = 0, newMax = 255;
+    do
+    {
+        if (!std::getline(file, line))
+            return false;
+    } while (isCommentOrEmpty(line));
+    std::istringstream iss(line);
+    if (!(iss >> newWidth >> newHeight))
+    {
+        std::string rest;
+        while (iss >> rest)
+        {
+        }
+        if (!(file >> newWidth >> newHeight))
+            return false;
+    }
+    if (!(file >> newMax))
+        return false;
+    file.get();
+
+    // free old data safely
+    unsigned char **oldData = data;
+    int oldHeight = height;
+    if (oldData)
+    {
+        for (int r = 0; r < oldHeight; ++r)
+            delete[] oldData[r];
+        delete[] oldData;
+        data = nullptr;
+    }
+
+    // assign new dimensions and allocate
+    width = newWidth;
+    height = newHeight;
+    maxColorValue = newMax;
+
+    data = new unsigned char *[height];
+    for (int i = 0; i < height; ++i)
+    {
+        data[i] = new unsigned char[width * 3];
+    }
+
+    int val;
+    int idx = 0;
+    const int expected = width * height * 3;
+    while (idx < expected && (file >> val))
+    {
+        int row = idx / (width * 3);
+        int col = idx % (width * 3);
+        data[row][col] = static_cast<unsigned char>(val);
+        ++idx;
+    }
+    return (idx == expected);
+}
+
+bool PPMImage::savePPM(const std::string &filename) const
+{
     std::ofstream file(filename);
-    if (!file.is_open() || !data) return false;
+    if (!file.is_open() || !data)
+        return false;
     file << "P3\n";
     file << width << " " << height << "\n";
     file << maxColorValue << "\n";
-    for (int i = 0; i < width * height * 3; ++i) {
-        file << static_cast<int>(data[i]) << ((i + 1) % width == 0 ? "\n" : " ");
+    for (int i = 0; i < height; ++i)
+    {
+        for (int j = 0; j < width * 3; ++j)
+        {
+            file << static_cast<int>(data[i][j]) << (((j + 1) % (width * 3) == 0) ? "\n" : " ");
+        }
     }
     return true;
 }
 
-bool PPMImage::loadPPMBinary(const std::string& filename) {
+bool PPMImage::loadPPMBinary(const std::string &filename)
+{
     std::ifstream file(filename, std::ios::binary);
-    if (!file.is_open()) return false;
+    if (!file.is_open())
+        return false;
     std::string line;
     std::getline(file, line);
-    if (line != "P6") return false;
-    do { std::getline(file, line); } while (line[0] == '#');
+    if (line != "P6")
+        return false;
+
+    int newWidth = 0, newHeight = 0, newMax = 255;
+    // skip comments/blank lines and parse width/height
+    do
+    {
+        if (!std::getline(file, line))
+            return false;
+    } while (isCommentOrEmpty(line));
     std::istringstream iss(line);
-    iss >> width >> height;
-    file >> maxColorValue;
-    file.get();
-    delete[] data;
-    data = new unsigned char[width * height * 3];
-    file.read(reinterpret_cast<char*>(data), width * height * 3);
+    if (!(iss >> newWidth >> newHeight))
+    {
+        if (!(file >> newWidth >> newHeight))
+            return false;
+    }
+    if (!(file >> newMax))
+        return false;
+    file.get(); // consume single whitespace/newline after header
+
+    // free old data safely
+    unsigned char **oldData = data;
+    int oldHeight = height;
+    if (oldData)
+    {
+        for (int r = 0; r < oldHeight; ++r)
+            delete[] oldData[r];
+        delete[] oldData;
+        data = nullptr;
+    }
+
+    // assign new dims and allocate
+    width = newWidth;
+    height = newHeight;
+    maxColorValue = newMax;
+
+    data = new unsigned char *[height];
+    for (int i = 0; i < height; ++i)
+    {
+        data[i] = new unsigned char[width * 3];
+    }
+
+    // read binary data row by row into 2D array
+    for (int r = 0; r < height; ++r)
+    {
+        file.read(reinterpret_cast<char *>(data[r]), width * 3);
+        if (!file)
+        {
+            // failed to read full row, clean up allocated memory
+            for (int k = 0; k < height; ++k)
+                delete[] data[k];
+            delete[] data;
+            data = nullptr;
+            width = height = 0;
+            return false;
+        }
+    }
     return true;
 }
 
-bool PPMImage::savePPMBinary(const std::string& filename) const {
+bool PPMImage::savePPMBinary(const std::string &filename) const
+{
     std::ofstream file(filename, std::ios::binary);
-    if (!file.is_open() || !data) return false;
+    if (!file.is_open() || !data)
+        return false;
     file << "P6\n";
     file << width << " " << height << "\n";
     file << maxColorValue << "\n";
-    file.write(reinterpret_cast<const char*>(data), width * height * 3);
+    for (int i = 0; i < height; ++i)
+    {
+        file.write(reinterpret_cast<const char *>(data[i]), width * 3);
+    }
     return true;
 }
-

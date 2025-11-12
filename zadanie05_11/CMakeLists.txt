@@ -4,34 +4,35 @@ project(zadanie05_11 VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick Qml QuickControls2 Core)
+# Switch to Widgets-based application instead of QML/Quick
+find_package(Qt6 REQUIRED COMPONENTS Widgets Core)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
 qt_add_executable(appzadanie05_11
     main.cpp
-)
-
-qt_add_qml_module(appzadanie05_11
-    URI zadanie05_11
-    QML_FILES
-        Main.qml
-    SOURCES filehandler.h filehandler.cpp
-)
-
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
-set_target_properties(appzadanie05_11 PROPERTIES
-#    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appzadanie05_11
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
+    MainWindow.cpp
+        utils/filehandler.cpp
+        utils/filehandler.h
+    MainWindow.h
+    MainWindow.cpp
+        utils/image/PBMImage.cpp
+        utils/image/PBMImage.h
+        utils/image/PGMImage.h
+        utils/image/PGMImage.cpp
+        utils/image/PPMImage.cpp
+        utils/image/PPMImage.h
+        components/file/FileController.h
+        components/file/FileController.cpp
+        components/tools/ToolsManager.h
+        components/tools/ToolsManager.cpp
+        components/tools/GrayscaleDialog.cpp
+        components/tools/InvertDialog.h
+        components/tools/InvertDialog.cpp
 )
 
 target_link_libraries(appzadanie05_11
-    PRIVATE Qt6::Quick Qt6::Qml Qt6::QuickControls2 Qt6::Core
+    PRIVATE Qt6::Widgets Qt6::Core
 )
 
 include(GNUInstallDirs)
