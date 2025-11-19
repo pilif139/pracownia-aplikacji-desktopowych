@@ -19,6 +19,9 @@ signals:
 private slots:
     void onGrayscaleSelected();
     void onInvertSelected();
+    void onLinearContrastSelected();
+    void onLogContrastSelected();
+    void onExpContrastSelected();
 
 private:
     FileHandler *fileHandler;

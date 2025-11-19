@@ -10,6 +10,8 @@
 #include <QtCore/qcoreapplication.h>
 #include <QScrollArea>
 
+#include "components/tools/contrast/ExpContrastDialog.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), imageLabel(new QLabel(this)), saveAction(nullptr), openAction(nullptr), scrollArea(nullptr), toolsManager(nullptr)
 {
@@ -25,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     scrollArea->setWidget(imageLabel);
     setCentralWidget(scrollArea);
     scrollArea->setAlignment(Qt::AlignCenter);
+    scrollArea->setVisible(false);
 
     QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 
@@ -53,6 +56,7 @@ void MainWindow::onImageLoaded(bool success, const QString &message)
 {
     if (!success) {
         if (toolsMenu) toolsMenu->setEnabled(false);
+        if (scrollArea) scrollArea->setVisible(false);
         QMessageBox::warning(this, tr("Load Failed"), message);
         return;
     }
@@ -62,6 +66,7 @@ void MainWindow::onImageLoaded(bool success, const QString &message)
     int h = fileHandler->imageHeight();
     if (!raw || w <= 0 || h <= 0) {
         if (toolsMenu) toolsMenu->setEnabled(false);
+        if (scrollArea) scrollArea->setVisible(false);
         QMessageBox::warning(this, tr("Load Failed"), tr("Invalid image data"));
         return;
     }
@@ -77,6 +82,7 @@ void MainWindow::onImageLoaded(bool success, const QString &message)
     imageLabel->adjustSize();
     statusBar()->showMessage(message, 3000);
     if (toolsMenu) toolsMenu->setEnabled(true);
+    if (scrollArea) scrollArea->setVisible(true);
 }
 
 void MainWindow::onImageSaved(bool success, const QString &message)

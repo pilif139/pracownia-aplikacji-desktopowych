@@ -63,8 +63,7 @@ bool FileHandler::saveImage(const QString &filePath) {
         emit imageSaved(false, "No image data to save");
         return false;
     }
-    bool ok = m_ppm->savePPMBinary(path.toStdString());
-    if (!ok) {
+    if (!m_ppm->savePPMBinary(path.toStdString())) {
         emit imageSaved(false, "Failed to save PPM image: " + path);
         return false;
     }
@@ -84,7 +83,7 @@ int FileHandler::imageHeight() const
 
 int FileHandler::imageChannels() const
 {
-    return m_ppm ? 3 : 0; // rgb 3 colors
+    return m_ppm ? 3 : 0;
 }
 
 QByteArray FileHandler::imageRow(int row) const
