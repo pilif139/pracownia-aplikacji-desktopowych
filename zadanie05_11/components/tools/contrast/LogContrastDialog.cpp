@@ -38,7 +38,7 @@ LogContrastDialog::LogContrastDialog(FileHandler* file_handler, QWidget *parent)
 }
 
 LogContrastDialog::~LogContrastDialog() {
-    if (fileHandler && !fileHandler->file_backup.empty()) {
+    if (fileHandler) {
         fileHandler->deleteBackup();
     }
 }
@@ -49,8 +49,7 @@ void LogContrastDialog::onSliderChanged(int value) {
     k = value / 100.0;
     kLabel->setText(tr("k: %1").arg(k, 0, 'f', 2));
 
-    ContrastTools::applyLogarithmic(fileHandler->imageData(), fileHandler->imageWidth(),
-                                   fileHandler->imageHeight(), k);
+    ContrastTools::applyLogarithmic(fileHandler->getImage(), k);
 
     emit previewUpdated();
 }

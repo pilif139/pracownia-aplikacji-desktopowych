@@ -11,6 +11,7 @@ add_executable(hello_window
     src/main.cpp 
     src/glad.c
     src/triangle_mesh.cpp
+    src/square_mesh.cpp
 )
 
 target_include_directories(hello_window PRIVATE dependencies)

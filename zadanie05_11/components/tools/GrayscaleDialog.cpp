@@ -5,10 +5,12 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QTimer>
+#include <QColor>
 #include <cmath>
 
 GrayscaleDialog::GrayscaleDialog(FileHandler *file_handler, QWidget *parent)
     : QDialog(parent),
+        lookupTable{},
         fileHandler(file_handler),
         slider(new QSlider(Qt::Horizontal, this)),
         valueLabel(new QLabel(this)),
@@ -48,32 +50,28 @@ GrayscaleDialog::GrayscaleDialog(FileHandler *file_handler, QWidget *parent)
      QTimer::singleShot(0, this, [this]() { if (slider) slider->setFocus(); });
 }
 GrayscaleDialog::~GrayscaleDialog() {
-    if (fileHandler && !fileHandler->file_backup.empty()) fileHandler->deleteBackup();
+    if (fileHandler) fileHandler->deleteBackup();
 }
 
 void GrayscaleDialog::applyFactorToHandler(double factor) {
     if (!fileHandler) return;
-    if (fileHandler->file_backup.empty()) return;
-     uint8_t **data = fileHandler->imageData();
-     if (!data) return;
-     const uint f_width = fileHandler->imageWidth();
-     const uint f_height = fileHandler->imageHeight();
 
-     for (int y = 0; y < f_height; ++y) {
-         unsigned char *rowDst = data[y];
-         const uint8_t *rowSrc = fileHandler->file_backup.data() + (y * f_width * 3);
-         for (int x = 0; x < f_width; ++x) {
-            int idx = x * 3;
-            auto r = static_cast<double>(rowSrc[idx + 0]);
-            auto g = static_cast<double>(rowSrc[idx + 1]);
-            auto b = static_cast<double>(rowSrc[idx + 2]);
-            double L = 0.3 * r + 0.6 * g + 0.1 * b;
-            int nr = static_cast<int>(std::lround(r + factor * (L - r)));
-            int ng = static_cast<int>(std::lround(g + factor * (L - g)));
-            int nb = static_cast<int>(std::lround(b + factor * (L - b)));
-            rowDst[idx + 0] = static_cast<unsigned char>(qBound(0, nr, 255));
-            rowDst[idx + 1] = static_cast<unsigned char>(qBound(0, ng, 255));
-            rowDst[idx + 2] = static_cast<unsigned char>(qBound(0, nb, 255));
+    fileHandler->restoreOriginal();
+    QImage& img = fileHandler->getImage();
+    if (img.isNull()) return;
+
+    for (int y = 0; y < img.height(); ++y) {
+        for (int x = 0; x < img.width(); ++x) {
+            QColor color = img.pixelColor(x, y);
+            // Calculate luminance using ITU-R BT.709
+            double L = 0.3 * color.red() + 0.6 * color.green() + 0.1 * color.blue();
+
+            // Apply desaturation factor
+            int nr = qBound(0, static_cast<int>(std::lround(color.red() + factor * (L - color.red()))), 255);
+            int ng = qBound(0, static_cast<int>(std::lround(color.green() + factor * (L - color.green()))), 255);
+            int nb = qBound(0, static_cast<int>(std::lround(color.blue() + factor * (L - color.blue()))), 255);
+
+            img.setPixelColor(x, y, QColor(nr, ng, nb));
         }
     }
     emit previewUpdated();

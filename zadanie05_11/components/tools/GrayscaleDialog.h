@@ -6,6 +6,7 @@
 #include <QDialogButtonBox>
 
 #include "../../utils/filehandler.h"
+#include "../../utils/image/Image.h"
 
 
 class GrayscaleDialog : public QDialog{
@@ -27,7 +28,6 @@ private:
     void applyFactorToHandler(double factor);
 
     FileHandler *fileHandler;
-
     QSlider *slider;
     QLabel *valueLabel;
     QDialogButtonBox *buttonsBox;

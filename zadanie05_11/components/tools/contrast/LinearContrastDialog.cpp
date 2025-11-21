@@ -36,7 +36,7 @@ LinearContrastDialog::LinearContrastDialog(FileHandler* file_handler, QWidget *p
 }
 
 LinearContrastDialog::~LinearContrastDialog() {
-    if (fileHandler && !fileHandler->file_backup.empty()) {
+    if (fileHandler) {
         fileHandler->deleteBackup();
     }
 }
@@ -44,12 +44,10 @@ LinearContrastDialog::~LinearContrastDialog() {
 void LinearContrastDialog::onSliderChanged(int value) {
     fileHandler->restoreOriginal();
 
+    contrastValue = value / 128.0; // Convert to [-1.0, 1.0]
     contrastLabel->setText(tr("Contrast: %1").arg(value));
 
-    contrastValue = value / 128.0;
-
-    ContrastTools::applyLinear(fileHandler->imageData(), fileHandler->imageWidth(),
-                              fileHandler->imageHeight(), contrastValue);
+    ContrastTools::applyLinear(fileHandler->getImage(), contrastValue);
 
     emit previewUpdated();
 }

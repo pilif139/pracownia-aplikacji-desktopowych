@@ -19,18 +19,19 @@ FileController::FileController(FileHandler *fileHandler, QWidget *parent)
 }
 
 void FileController::open() const {
-    QString fileName = QFileDialog::getOpenFileName(m_parent, tr("Open File"), QString(), tr("PPM images (*.ppm);;All files (*)"));
+    QString fileName = QFileDialog::getOpenFileName(m_parent, tr("Open File"), QString(), tr("PPM images (*.ppm);;PBM images (*.pbm);;PGM images (*.pgm);;All files (*)"));
     if (fileName.isEmpty()) return;
 
     m_fileHandler->loadImage(fileName);
 }
 
 void FileController::save() const {
-    if (m_fileHandler->imageData() == nullptr) {
+    if (!m_fileHandler->hasImage()) {
         QMessageBox::information(m_parent, tr("Save"), tr("No image to save"));
         return;
     }
-    QString fileName = QFileDialog::getSaveFileName(m_parent, tr("Save Image"), QString(), tr("PPM Image (*.ppm);;All files (*)"));
+    QString fileName = QFileDialog::getSaveFileName(m_parent, tr("Save Image"), QString(),
+                                                    tr("PPM Image (*.ppm);;PGM Image (*.pgm);;PBM Image (*.pbm);;All files (*)"));
     if (fileName.isEmpty()) return;
     m_fileHandler->saveImage(fileName);
 }

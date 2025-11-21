@@ -2,9 +2,8 @@
 #define FILEHANDLER_H
 
 #include <QObject>
-#include <QUrl>
-#include "image/PPMImage.h"
-#include <vector>
+#include <QImage>
+#include <QtGui/QImage>
 
 class FileHandler : public QObject
 {
@@ -22,20 +21,20 @@ signals:
     void imageSaved(bool success, const QString &message);
 
 public: // image accessors
-    int imageWidth() const;
-    int imageHeight() const;
-    int imageChannels() const;
+    QImage& getImage() { return currentImage; }
+    const QImage& getImage() const { return currentImage; }
 
-    QByteArray imageRow(int row) const;
-    unsigned char **imageData() const;
+    int imageWidth() const { return currentImage.width(); }
+    int imageHeight() const { return currentImage.height(); }
+    bool hasImage() const { return !currentImage.isNull(); }
 
     void backupOriginal();
     void restoreOriginal();
     void deleteBackup();
-    std::vector<uint8_t> file_backup; // store backup as a value
 
 private:
-    PPMImage *m_ppm = nullptr;
+    QImage currentImage;
+    QImage backupImage;
 };
 
 #endif // FILEHANDLER_H

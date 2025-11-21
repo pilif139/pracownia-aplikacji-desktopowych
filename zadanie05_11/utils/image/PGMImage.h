@@ -1,25 +1,22 @@
-#ifndef INC_08_10_2025_PGMIMAGE_H
-#define INC_08_10_2025_PGMIMAGE_H
-#include <cstdint>
+#ifndef PGMIMAGE_H
+#define PGMIMAGE_H
+
 #include <string>
+#include "Image.h"
 
+class PGMImage : public Image {
+private:
+    int maxGrayValue = 255;
 
-class PGMImage {
-    int width;
-    int height;
-    uint8_t* data;
 public:
     PGMImage();
-    PGMImage(int w, int h);
-    ~PGMImage();
+    PGMImage(int w, int h, int maxVal = 255);
+    ~PGMImage() override;
 
-    bool loadPGM(const std::string& filename);
-    bool savePGM(const std::string& filename) const;
+    bool load(const std::string& filename) override;
+    bool save(const std::string& filename) const override;
 
-    int getWidth() const { return width; }
-    int getHeight() const { return height; }
-    uint8_t* getData() const { return data; }
+    int getMaxGrayValue() const { return maxGrayValue; }
 };
 
-
-#endif //INC_08_10_2025_PGMIMAGE_H
+#endif //PGMIMAGE_H

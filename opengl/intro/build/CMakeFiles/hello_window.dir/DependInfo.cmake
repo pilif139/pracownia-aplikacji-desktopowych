@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/glad.c" "CMakeFiles/hello_window.dir/src/glad.c.o" "gcc" "CMakeFiles/hello_window.dir/src/glad.c.o.d"
   "/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/main.cpp" "CMakeFiles/hello_window.dir/src/main.cpp.o" "gcc" "CMakeFiles/hello_window.dir/src/main.cpp.o.d"
+  "/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/square_mesh.cpp" "CMakeFiles/hello_window.dir/src/square_mesh.cpp.o" "gcc" "CMakeFiles/hello_window.dir/src/square_mesh.cpp.o.d"
   "/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/triangle_mesh.cpp" "CMakeFiles/hello_window.dir/src/triangle_mesh.cpp.o" "gcc" "CMakeFiles/hello_window.dir/src/triangle_mesh.cpp.o.d"
   )
 

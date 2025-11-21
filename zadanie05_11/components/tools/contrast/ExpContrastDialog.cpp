@@ -1,7 +1,3 @@
-//
-// Created by Filip on 18/11/2025.
-//
-
 #include "ExpContrastDialog.h"
 #include "ContrastTools.h"
 
@@ -38,7 +34,7 @@ ExpContrastDialog::ExpContrastDialog(FileHandler* file_handler, QWidget *parent)
 }
 
 ExpContrastDialog::~ExpContrastDialog() {
-    if (fileHandler && !fileHandler->file_backup.empty()) {
+    if (fileHandler) {
         fileHandler->deleteBackup();
     }
 }
@@ -49,8 +45,7 @@ void ExpContrastDialog::onSliderChanged(int value) {
     k = value / 100.0; // Convert to [0.01, 10.0]
     kLabel->setText(tr("k: %1").arg(k, 0, 'f', 2));
 
-    ContrastTools::applyExponential(fileHandler->imageData(), fileHandler->imageWidth(),
-                                   fileHandler->imageHeight(), k);
+    ContrastTools::applyExponential(fileHandler->getImage(), k);
 
     emit previewUpdated();
 }

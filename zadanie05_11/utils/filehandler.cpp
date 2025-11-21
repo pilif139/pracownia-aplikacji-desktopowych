@@ -1,131 +1,158 @@
 #include "filehandler.h"
-#include <QFile>
-#include <QTextStream>
-#include <QUrl>
 #include <QFileInfo>
-
+#include <QImage>
 #include "image/PPMImage.h"
-
-#include <fstream>
-#include <iostream>
-#include <string>
+#include "image/PGMImage.h"
+#include "image/PBMImage.h"
 
 FileHandler::FileHandler(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), currentImage(), backupImage()
 {
 }
 
 FileHandler::~FileHandler()
 {
-    delete m_ppm;
-    m_ppm = nullptr;
 }
 
 bool FileHandler::loadImage(const QString &filepath)
 {
-    std::cout<<"FileHandler::loadImage called with: "<<filepath.toStdString()<<std::endl;
     QString path = QFileInfo(filepath).absoluteFilePath();
     QFileInfo fi(path);
     QString ext = fi.suffix().toLower();
-    if (ext.toStdString() != "ppm") {
-        std::cout<<"Extension: "<<ext.toStdString()<<std::endl;
-        emit imageLoaded(false, "Only .ppm files are supported");
+
+    Image* img = nullptr;
+
+    if (ext == "ppm") {
+        img = new PPMImage();
+    } else if (ext == "pgm") {
+        img = new PGMImage();
+    } else if (ext == "pbm") {
+        img = new PBMImage();
+    } else {
+        emit imageLoaded(false, "Unsupported file extension: " + ext);
         return false;
     }
 
-    PPMImage *img = new PPMImage();
-    bool ok = img->loadPPMBinary(path.toStdString());
-    if (!ok) ok = img->loadPPM(path.toStdString());
-    if (!ok) {
+    if (!img->load(path.toStdString())) {
         delete img;
-        emit imageLoaded(false, "Failed to load PPM image: " + path);
+        emit imageLoaded(false, "Failed to load image: " + path);
         return false;
     }
 
-    // swap
-    delete m_ppm;
-    m_ppm = img;
+    int width = img->getWidth();
+    int height = img->getHeight();
+    Pixel** data = img->getData();
 
-    emit imageLoaded(true, "Loaded PPM: " + path);
+    if (!data || width <= 0 || height <= 0) {
+        delete img;
+        emit imageLoaded(false, "Invalid image data");
+        return false;
+    }
+
+    bool isGrayscale = (dynamic_cast<PGMImage*>(img) != nullptr || dynamic_cast<PBMImage*>(img) != nullptr);
+
+    currentImage = QImage(width, height, QImage::Format_RGB888);
+
+    for (int y = 0; y < height; ++y) {
+        uchar* scanLine = currentImage.scanLine(y);
+        Pixel* rowData = data[y];
+
+        if (isGrayscale) {
+            for (int x = 0; x < width; ++x) {
+                Pixel gray = rowData[x];
+                scanLine[x * 3] = gray;     // R
+                scanLine[x * 3 + 1] = gray; // G
+                scanLine[x * 3 + 2] = gray; // B
+            }
+        } else {
+            for (int x = 0; x < width * 3; ++x) {
+                scanLine[x] = rowData[x];
+            }
+        }
+    }
+
+    delete img;
+    emit imageLoaded(true, "Loaded image: " + path);
     return true;
 }
 
 bool FileHandler::saveImage(const QString &filePath) {
+    if (currentImage.isNull()) {
+        emit imageSaved(false, "No image data to save");
+        return false;
+    }
+
     QString path = QFileInfo(filePath).absoluteFilePath();
     QFileInfo fi(path);
     QString ext = fi.suffix().toLower();
-    if (ext != "ppm") {
+
+    if (ext.isEmpty()) {
         ext = "ppm";
         path += ".ppm";
     }
 
-    if (!m_ppm) {
-        emit imageSaved(false, "No image data to save");
+    Image* img = nullptr;
+
+    int width = currentImage.width();
+    int height = currentImage.height();
+    bool isGrayscale = (ext == "pgm" || ext == "pbm");
+
+    if (ext == "ppm") {
+        img = new PPMImage(width, height);
+    } else if (ext == "pgm") {
+        img = new PGMImage(width, height);
+    } else if (ext == "pbm") {
+        img = new PBMImage(width, height);
+    } else {
+        emit imageSaved(false, "Unsupported file extension: " + ext);
         return false;
     }
-    if (!m_ppm->savePPMBinary(path.toStdString())) {
-        emit imageSaved(false, "Failed to save PPM image: " + path);
+
+    Pixel** data = img->getData();
+
+    for (int y = 0; y < height; ++y) {
+        const uchar* scanLine = currentImage.constScanLine(y);
+        Pixel* rowData = data[y];
+
+        if (isGrayscale) {
+            for (int x = 0; x < width; ++x) {
+                int r = scanLine[x * 3];
+                int g = scanLine[x * 3 + 1];
+                int b = scanLine[x * 3 + 2];
+
+                rowData[x] = static_cast<Pixel>(0.299 * r + 0.587 * g + 0.114 * b);
+            }
+        } else {
+            for (int x = 0; x < width * 3; ++x) {
+                rowData[x] = scanLine[x];
+            }
+        }
+    }
+
+    bool success = img->save(path.toStdString());
+    delete img;
+
+    if (!success) {
+        emit imageSaved(false, "Failed to save image: " + path);
         return false;
     }
-    emit imageSaved(true, "Saved PPM: " + path);
+
+    emit imageSaved(true, "Saved image: " + path);
     return true;
 }
 
-int FileHandler::imageWidth() const
-{
-    return m_ppm ? m_ppm->getWidth() : 0;
-}
-
-int FileHandler::imageHeight() const
-{
-    return m_ppm ? m_ppm->getHeight() : 0;
-}
-
-int FileHandler::imageChannels() const
-{
-    return m_ppm ? 3 : 0;
-}
-
-QByteArray FileHandler::imageRow(int row) const
-{
-    if (!m_ppm) return QByteArray();
-    int h = m_ppm->getHeight();
-    int w = m_ppm->getWidth();
-    if (row < 0 || row >= h) return QByteArray();
-
-    unsigned char **data = m_ppm->getData();
-    if (!data) return QByteArray();
-
-    QByteArray ba;
-    ba.resize(w * 3);
-    for (int c = 0; c < w * 3; ++c) ba[c] = static_cast<char>(data[row][c]);
-    return ba;
-}
-
-uint8_t **FileHandler::imageData() const
-{
-    return m_ppm ? m_ppm->getData() : nullptr;
-}
-
 void FileHandler::backupOriginal() {
-    if (!m_ppm) return;
-    uint8_t **data = imageData();
-    if (!data) return;
-    file_backup.resize(imageWidth() * imageHeight() * 3);
-    for (int r = 0; r < imageHeight(); ++r) {
-        std::memcpy(&file_backup[r * imageWidth() * 3], data[r], imageWidth() * 3);
+    if (!currentImage.isNull()) {
+        backupImage = currentImage.copy();
     }
 }
 
 void FileHandler::restoreOriginal() {
-    if (file_backup.empty()) return;
-    uint8_t **data = imageData();
-    if (!data) return;
-    for (int r = 0; r < imageHeight(); ++r) {
-        std::memcpy(data[r], &file_backup[r * imageWidth()* 3], imageWidth() * 3);
+    if (!backupImage.isNull()) {
+        currentImage = backupImage.copy();
     }
 }
 
 void FileHandler::deleteBackup() {
-    file_backup.clear();
+    backupImage = QImage();
 }

@@ -2,6 +2,7 @@
 
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QColor>
 
 InvertDialog::InvertDialog(FileHandler *file_handler, QWidget *parent)
     : QDialog(parent),
@@ -37,7 +38,7 @@ InvertDialog::InvertDialog(FileHandler *file_handler, QWidget *parent)
 }
 
 InvertDialog::~InvertDialog() {
-    if (fileHandler && !fileHandler->file_backup.empty())
+    if (fileHandler)
         fileHandler->deleteBackup();
 }
 
@@ -55,22 +56,25 @@ void InvertDialog::onRejected() {
 
 void InvertDialog::onPreviewUpdated(bool isInverted) {
     if (!fileHandler) return;
-    uint8_t **data = fileHandler->imageData();
-    if (!data) return;
 
     if (!isInverted) {
         fileHandler->restoreOriginal();
+        emit previewUpdated();
         return;
     }
 
-    const uint f_width = fileHandler->imageWidth();
-    const uint f_height = fileHandler->imageHeight();
-    for (uint y = 0; y < f_height; ++y) {
-        for (uint x = 0; x < f_width; ++x) {
-            uint idx = x * 3;
-                data[y][idx] = 255 - data[y][idx];         // R
-                data[y][idx + 1] = 255 - data[y][idx + 1]; // G
-                data[y][idx + 2] = 255 - data[y][idx + 2]; // B
+    fileHandler->restoreOriginal();
+    QImage& img = fileHandler->getImage();
+    if (img.isNull()) return;
+
+    // Invert colors using QColor and pixel()/setPixel()
+    for (int y = 0; y < img.height(); ++y) {
+        for (int x = 0; x < img.width(); ++x) {
+            QColor color = img.pixelColor(x, y);
+            color.setRgb(255 - color.red(), 255 - color.green(), 255 - color.blue());
+            img.setPixelColor(x, y, color);
         }
     }
+
+    emit previewUpdated();
 }

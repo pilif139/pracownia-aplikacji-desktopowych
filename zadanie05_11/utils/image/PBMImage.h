@@ -1,25 +1,18 @@
 #ifndef PBMIMAGE_H
 #define PBMIMAGE_H
 
-#include <cstddef>
 #include <string>
+#include "Image.h"
 
-
-class PBMImage {
-    int width;
-    int height;
-    bool** data;
+class PBMImage : public Image {
 public:
     PBMImage();
     PBMImage(int w, int h);
-    ~PBMImage();
+    ~PBMImage() override;
 
-    bool loadPBM(const std::string& filename);
-    bool savePBM(const std::string& filename) const;
-
-    int getWidth() const { return width; }
-    int getHeight() const { return height; }
-    bool** getData() const { return data; }
+    // Override virtual methods from Image base class (uses binary P4 format)
+    bool load(const std::string& filename) override;
+    bool save(const std::string& filename) const override;
 };
 
 

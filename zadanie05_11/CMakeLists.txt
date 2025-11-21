@@ -37,6 +37,7 @@ qt_add_executable(appzadanie05_11
         components/tools/contrast/ExpContrastDialog.h
         components/tools/contrast/ContrastTools.cpp
         components/tools/contrast/ContrastTools.h
+        utils/image/Image.h
 )
 
 target_link_libraries(appzadanie05_11

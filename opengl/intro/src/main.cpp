@@ -1,5 +1,5 @@
 #include "config.h"
-#include "triangle_mesh.h"
+#include "square_mesh.h"
 
 unsigned int make_module(const std::string &filepath, unsigned int module_type)
 {
@@ -29,6 +29,7 @@ unsigned int make_module(const std::string &filepath, unsigned int module_type)
         glGetShaderInfoLog(shaderModule, 1024, NULL, errorLog);
         std::cout << "Shader Module compilation error:\n " << errorLog << std::endl;
     }
+
     return shaderModule;
 }
 
@@ -58,6 +59,12 @@ unsigned int make_shader(const std::string &vertex_filepath, const std::string &
         glDeleteShader(module);
     }
     return shader;
+}
+
+void processInput(GLFWwindow *window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
 }
 
 int main()
@@ -100,22 +107,28 @@ int main()
     // glfwGetFramebufferSize(window, &w, &h);
     // glViewport(0, 0, 200, 200);
 
-    TriangleMesh *triangle = new TriangleMesh();
+    // TriangleMesh *triangle = new TriangleMesh();
+    SquareMesh *square = new SquareMesh();
 
     unsigned int shader = make_shader("../src/shaders/vertex.glsl", "../src/shaders/fragment.glsl");
+
+    // uncomment this call to draw in wireframe polygons.
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
 
+        processInput(window);
         glClear(GL_COLOR_BUFFER_BIT);
         glUseProgram(shader);
-        triangle->draw();
+        // triangle->draw();
+        square->draw();
 
         glfwSwapBuffers(window);
     }
 
-    delete triangle;
+    delete square;
     glDeleteProgram(shader);
     glfwTerminate();
     return 0;

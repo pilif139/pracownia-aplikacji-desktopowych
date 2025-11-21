@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), imageLabel(new QLabel(this)), saveAction(nullptr), openAction(nullptr), scrollArea(nullptr), toolsManager(nullptr)
 {
     setWindowTitle("Gimp demo");
-    resize(800, 600);
+    setWindowState(Qt::WindowMaximized);
 
     imageLabel->setBackgroundRole(QPalette::Base);
     imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -61,22 +61,14 @@ void MainWindow::onImageLoaded(bool success, const QString &message)
         return;
     }
 
-    unsigned char **raw = fileHandler->imageData();
-    int w = fileHandler->imageWidth();
-    int h = fileHandler->imageHeight();
-    if (!raw || w <= 0 || h <= 0) {
+    const QImage& img = fileHandler->getImage();
+    if (img.isNull()) {
         if (toolsMenu) toolsMenu->setEnabled(false);
         if (scrollArea) scrollArea->setVisible(false);
         QMessageBox::warning(this, tr("Load Failed"), tr("Invalid image data"));
         return;
     }
 
-    QImage img(w, h, QImage::Format_RGB888);
-    for (int y = 0; y < h; ++y) {
-        unsigned char *row = raw[y];
-        uchar *scanline = img.scanLine(y);
-        for (int x = 0; x < w * 3; ++x) scanline[x] = row[x];
-    }
 
     imageLabel->setPixmap(QPixmap::fromImage(img));
     imageLabel->adjustSize();

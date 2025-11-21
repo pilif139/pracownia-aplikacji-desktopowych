@@ -1,31 +1,23 @@
-#ifndef IMAGE_H
-#define IMAGE_H
+#ifndef PPMIMAGE_H
+#define PPMIMAGE_H
 
 #include <string>
-#include <cstdint>
+#include "Image.h"
 
-class PPMImage
+class PPMImage : public Image
 {
-private:
-    int width;
-    int height;
-    int maxColorValue;
-    uint8_t** data; // wskaźnik na dane pikseli (RGB)
+    int maxColorValue = 255;
 
 public:
     PPMImage();
     PPMImage(int w, int h, int maxVal = 255);
-    ~PPMImage();
+    ~PPMImage() override;
 
-    bool loadPPM(const std::string &filename);
-    bool savePPM(const std::string &filename) const;
-    bool loadPPMBinary(const std::string &filename);
-    bool savePPMBinary(const std::string &filename) const;
+    // Override virtual methods from Image base class (uses binary P6 format)
+    bool load(const std::string &filename) override;
+    bool save(const std::string &filename) const override;
 
-    int getWidth() const { return width; }
-    int getHeight() const { return height; }
     int getMaxColorValue() const { return maxColorValue; }
-    uint8_t **getData() const { return data; }
 };
 
-#endif // IMAGE_H
+#endif // PPMIMAGE_H

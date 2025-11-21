@@ -177,6 +177,30 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/square_mesh.o: src/square_mesh.cpp.o
+.PHONY : src/square_mesh.o
+
+# target to build an object file
+src/square_mesh.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/src/square_mesh.cpp.o
+.PHONY : src/square_mesh.cpp.o
+
+src/square_mesh.i: src/square_mesh.cpp.i
+.PHONY : src/square_mesh.i
+
+# target to preprocess a source file
+src/square_mesh.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/src/square_mesh.cpp.i
+.PHONY : src/square_mesh.cpp.i
+
+src/square_mesh.s: src/square_mesh.cpp.s
+.PHONY : src/square_mesh.s
+
+# target to generate assembly for a file
+src/square_mesh.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/src/square_mesh.cpp.s
+.PHONY : src/square_mesh.cpp.s
+
 src/triangle_mesh.o: src/triangle_mesh.cpp.o
 .PHONY : src/triangle_mesh.o
 
@@ -216,6 +240,9 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/square_mesh.o"
+	@echo "... src/square_mesh.i"
+	@echo "... src/square_mesh.s"
 	@echo "... src/triangle_mesh.o"
 	@echo "... src/triangle_mesh.i"
 	@echo "... src/triangle_mesh.s"
