@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/hello_window.dir/src/glad.c.o.d"
   "CMakeFiles/hello_window.dir/src/main.cpp.o"
   "CMakeFiles/hello_window.dir/src/main.cpp.o.d"
+  "CMakeFiles/hello_window.dir/src/shader.cpp.o"
+  "CMakeFiles/hello_window.dir/src/shader.cpp.o.d"
   "CMakeFiles/hello_window.dir/src/square_mesh.cpp.o"
   "CMakeFiles/hello_window.dir/src/square_mesh.cpp.o.d"
   "CMakeFiles/hello_window.dir/src/triangle_mesh.cpp.o"

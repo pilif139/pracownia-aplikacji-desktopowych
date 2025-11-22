@@ -22,5 +22,11 @@
   "command": "/usr/bin/clang++  -I/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/dependencies -isystem /opt/homebrew/include -iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -g -std=gnu++20 -arch arm64 -o CMakeFiles/hello_window.dir/src/square_mesh.cpp.o -c /Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/square_mesh.cpp",
   "file": "/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/square_mesh.cpp",
   "output": "CMakeFiles/hello_window.dir/src/square_mesh.cpp.o"
+},
+{
+  "directory": "/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build",
+  "command": "/usr/bin/clang++  -I/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/dependencies -isystem /opt/homebrew/include -iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -g -std=gnu++20 -arch arm64 -o CMakeFiles/hello_window.dir/src/shader.cpp.o -c /Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/shader.cpp",
+  "file": "/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/shader.cpp",
+  "output": "CMakeFiles/hello_window.dir/src/shader.cpp.o"
 }
 ]

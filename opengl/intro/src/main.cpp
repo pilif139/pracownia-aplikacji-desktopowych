@@ -1,5 +1,7 @@
 #include "config.h"
+#include "shader.h"
 #include "square_mesh.h"
+#include "triangle_mesh.h"
 
 unsigned int make_module(const std::string &filepath, unsigned int module_type)
 {
@@ -107,29 +109,44 @@ int main()
     // glfwGetFramebufferSize(window, &w, &h);
     // glViewport(0, 0, 200, 200);
 
-    // TriangleMesh *triangle = new TriangleMesh();
-    SquareMesh *square = new SquareMesh();
+    TriangleMesh *triangle = new TriangleMesh();
+    // SquareMesh *square = new SquareMesh();
 
-    unsigned int shader = make_shader("../src/shaders/vertex.glsl", "../src/shaders/fragment.glsl");
+    Shader shader("src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
 
     // uncomment this call to draw in wireframe polygons.
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    int nrAttributes;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
+    std::cout << "Maximum number of vertex attributes supported: " << nrAttributes << std::endl;
 
+    float xOffset = 0.0f;
+    int direction = 1;
     while (!glfwWindowShouldClose(window))
     {
+        if(xOffset > 0.5f){
+            direction = -1;
+        } else if (xOffset < -0.5f) {
+            direction = 1;
+        }
+        xOffset += 0.02f * direction;
         glfwPollEvents();
 
         processInput(window);
         glClear(GL_COLOR_BUFFER_BIT);
-        glUseProgram(shader);
-        // triangle->draw();
-        square->draw();
+        shader.use();
+        shader.setFloat("xOffset", xOffset);
+        // float timeValue = glfwGetTime();
+        // float greenValue = sin(timeValue)/2 + 0.5f;
+        // shader.setVec3("color", greenValue -0.5f, greenValue, greenValue -0.5f);
+        triangle->draw();
+        // square->draw();
 
         glfwSwapBuffers(window);
     }
 
-    delete square;
-    glDeleteProgram(shader);
+    // delete square;
+    delete triangle;
     glfwTerminate();
     return 0;
 }

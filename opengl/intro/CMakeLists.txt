@@ -6,12 +6,13 @@ set(CMAKE_CXX_STANDARD 20)
 find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
-add_executable(hello_window 
-    src/config.h 
-    src/main.cpp 
+add_executable(hello_window
+    src/config.h
+    src/main.cpp
     src/glad.c
     src/triangle_mesh.cpp
     src/square_mesh.cpp
+    src/shader.cpp
 )
 
 target_include_directories(hello_window PRIVATE dependencies)

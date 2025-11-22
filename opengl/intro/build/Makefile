@@ -177,6 +177,30 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/shader.o: src/shader.cpp.o
+.PHONY : src/shader.o
+
+# target to build an object file
+src/shader.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/src/shader.cpp.o
+.PHONY : src/shader.cpp.o
+
+src/shader.i: src/shader.cpp.i
+.PHONY : src/shader.i
+
+# target to preprocess a source file
+src/shader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/src/shader.cpp.i
+.PHONY : src/shader.cpp.i
+
+src/shader.s: src/shader.cpp.s
+.PHONY : src/shader.s
+
+# target to generate assembly for a file
+src/shader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/src/shader.cpp.s
+.PHONY : src/shader.cpp.s
+
 src/square_mesh.o: src/square_mesh.cpp.o
 .PHONY : src/square_mesh.o
 
@@ -240,6 +264,9 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/shader.o"
+	@echo "... src/shader.i"
+	@echo "... src/shader.s"
 	@echo "... src/square_mesh.o"
 	@echo "... src/square_mesh.i"
 	@echo "... src/square_mesh.s"
