@@ -8,3 +8,7 @@
 #include <string>
 
 #include <vector>
+
+inline std::string getPath(const std::string& relativePath){
+    return std::string(PROJECT_ROOT) + "/" + relativePath;
+}

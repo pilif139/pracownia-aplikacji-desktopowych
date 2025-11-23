@@ -1,7 +1,7 @@
 #include "config.h"
 #include "shader.h"
 #include "square_mesh.h"
-#include "triangle_mesh.h"
+// #include "triangle_mesh.h"
 
 unsigned int make_module(const std::string &filepath, unsigned int module_type)
 {
@@ -109,10 +109,12 @@ int main()
     // glfwGetFramebufferSize(window, &w, &h);
     // glViewport(0, 0, 200, 200);
 
-    TriangleMesh *triangle = new TriangleMesh();
-    // SquareMesh *square = new SquareMesh();
+    // TriangleMesh *triangle = new TriangleMesh();
+    SquareMesh *square = new SquareMesh();
+    square->loadTexture(getPath("./assets/wall.jpg"));
+    square->loadTexture(getPath("./assets/awesomeface.png"));
 
-    Shader shader("src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
+    Shader shader(getPath("./src/shaders/textureVertex.glsl").c_str(), getPath("./src/shaders/textureFragment.glsl").c_str());
 
     // uncomment this call to draw in wireframe polygons.
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -135,18 +137,19 @@ int main()
         processInput(window);
         glClear(GL_COLOR_BUFFER_BIT);
         shader.use();
-        shader.setFloat("xOffset", xOffset);
+        shader.setInt("texture2", 1);
+        // shader.setFloat("xOffset", xOffset);
         // float timeValue = glfwGetTime();
         // float greenValue = sin(timeValue)/2 + 0.5f;
         // shader.setVec3("color", greenValue -0.5f, greenValue, greenValue -0.5f);
-        triangle->draw();
-        // square->draw();
+        // triangle->draw();
+        square->draw();
 
         glfwSwapBuffers(window);
     }
 
-    // delete square;
-    delete triangle;
+    delete square;
+    // delete triangle;
     glfwTerminate();
     return 0;
 }

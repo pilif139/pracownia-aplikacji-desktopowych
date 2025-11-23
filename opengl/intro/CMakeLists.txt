@@ -3,6 +3,8 @@ project(hello_window VERSION 1.0.0)
 
 set(CMAKE_CXX_STANDARD 20)
 
+ADD_COMPILE_DEFINITIONS(PROJECT_ROOT="${CMAKE_SOURCE_DIR}")
+
 find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 

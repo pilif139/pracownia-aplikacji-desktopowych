@@ -3,7 +3,7 @@
 
 # compile C with /usr/bin/clang
 # compile CXX with /usr/bin/clang++
-C_DEFINES = 
+C_DEFINES = -DPROJECT_ROOT=\"/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro\"
 
 C_INCLUDES = -I/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/dependencies -isystem /opt/homebrew/include -iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
 
@@ -11,7 +11,7 @@ C_FLAGSarm64 = -g -arch arm64
 
 C_FLAGS = -g -arch arm64
 
-CXX_DEFINES = 
+CXX_DEFINES = -DPROJECT_ROOT=\"/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro\"
 
 CXX_INCLUDES = -I/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/dependencies -isystem /opt/homebrew/include -iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
 
