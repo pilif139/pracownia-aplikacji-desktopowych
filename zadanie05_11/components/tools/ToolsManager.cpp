@@ -1,6 +1,7 @@
 #include "ToolsManager.h"
 
 #include "GrayscaleDialog.h"
+#include "DesaturateDialog.h"
 #include "InvertDialog.h"
 #include "contrast/LinearContrastDialog.h"
 #include "contrast/LogContrastDialog.h"
@@ -10,9 +11,13 @@ ToolsManager::ToolsManager(FileHandler *file_handler, QWidget *parent)
     : QObject(parent), fileHandler(file_handler), parentWidget(parent) {}
 
 void ToolsManager::populateMenu(QMenu *toolsMenu) {
-    auto *gray = new QAction(tr("Desaturate Image"), this);
+    auto *gray = new QAction(tr("Grayscale"), this);
     connect(gray, &QAction::triggered, this, &ToolsManager::onGrayscaleSelected);
     toolsMenu->addAction(gray);
+
+    auto *desaturate = new QAction(tr("Desaturate"), this);
+    connect(desaturate, &QAction::triggered, this, &ToolsManager::onDesaturateSelected);
+    toolsMenu->addAction(desaturate);
 
     auto *invert = new QAction(tr("Invert Colors"), this);
     connect(invert, &QAction::triggered, this, &ToolsManager::onInvertSelected);
@@ -44,6 +49,24 @@ void ToolsManager::onGrayscaleSelected() {
 
     GrayscaleDialog dialog(fileHandler, parentWidget);
     connect(&dialog, &GrayscaleDialog::previewUpdated, [this]() {
+        emit imageModified(true, tr("Image preview updated."));
+    });
+
+    if (dialog.exec() == QDialog::Accepted) {
+        emit imageModified(true, tr("Image desaturated successfully."));
+    } else {
+        emit imageModified(true, tr("Image desaturation canceled."));
+    }
+}
+
+void ToolsManager::onDesaturateSelected() {
+    if (!fileHandler) {
+        emit imageModified(false, tr("No file handler available."));
+        return;
+    }
+
+    DesaturateDialog dialog(fileHandler, parentWidget);
+    connect(&dialog, &DesaturateDialog::previewUpdated, [this]() {
         emit imageModified(true, tr("Image preview updated."));
     });
 

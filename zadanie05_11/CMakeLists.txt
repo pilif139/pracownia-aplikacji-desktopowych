@@ -30,6 +30,9 @@ qt_add_executable(appzadanie05_11
         components/tools/GrayscaleDialog.cpp
         components/tools/InvertDialog.h
         components/tools/InvertDialog.cpp
+        components/tools/DesaturateDialog.h
+        components/tools/DesaturateDialog.cpp
+        components/tools/InvertDialog.cpp
         components/tools/contrast/LinearContrastDialog.cpp
         components/tools/contrast/LinearContrastDialog.h
         components/tools/contrast/LogContrastDialog.cpp

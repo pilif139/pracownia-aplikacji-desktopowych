@@ -18,6 +18,7 @@ signals:
 
 private slots:
     void onGrayscaleSelected();
+    void onDesaturateSelected();
     void onInvertSelected();
     void onLinearContrastSelected();
     void onLogContrastSelected();

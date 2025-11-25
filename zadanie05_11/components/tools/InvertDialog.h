@@ -1,7 +1,9 @@
 #ifndef ZADANIE05_11_NEGATIVEDIALOG_H
 #define ZADANIE05_11_NEGATIVEDIALOG_H
-#include "GrayscaleDialog.h"
 
+#include <QDialog>
+#include <QDialogButtonBox>
+#include "../../utils/filehandler.h"
 
 class InvertDialog : public QDialog {
     Q_OBJECT
