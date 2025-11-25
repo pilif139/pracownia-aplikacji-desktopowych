@@ -1,7 +1,3 @@
-//
-// Created by Filip on 11/11/2025.
-//
-
 #include "FileController.h"
 
 #include "../../utils/filehandler.h"

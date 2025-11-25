@@ -10,8 +10,6 @@
 #include <QtCore/qcoreapplication.h>
 #include <QScrollArea>
 
-#include "components/tools/contrast/ExpContrastDialog.h"
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), imageLabel(new QLabel(this)), saveAction(nullptr), openAction(nullptr), scrollArea(nullptr), toolsManager(nullptr)
 {

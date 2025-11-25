@@ -5,6 +5,12 @@
 #include <QImage>
 #include <QtGui/QImage>
 
+enum class ImageFormat {
+    Auto,
+    Binary,
+    Ascii
+};
+
 class FileHandler : public QObject
 {
     Q_OBJECT
@@ -14,7 +20,7 @@ public:
 
 public slots:
     bool loadImage(const QString &filepath);
-    bool saveImage(const QString &filepath);
+    bool saveImage(const QString &filepath, ImageFormat format = ImageFormat::Auto);
 
 signals:
     void imageLoaded(bool success, const QString &message);
@@ -35,6 +41,8 @@ public: // image accessors
 private:
     QImage currentImage;
     QImage backupImage;
+
+    bool isAsciiFormat(const QString &filepath);
 };
 
 #endif // FILEHANDLER_H

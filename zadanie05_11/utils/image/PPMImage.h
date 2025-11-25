@@ -13,9 +13,11 @@ public:
     PPMImage(int w, int h, int maxVal = 255);
     ~PPMImage() override;
 
-    // Override virtual methods from Image base class (uses binary P6 format)
-    bool load(const std::string &filename) override;
-    bool save(const std::string &filename) const override;
+    bool loadBinary(const std::string &filename) override;
+    bool saveBinary(const std::string &filename) const override;
+
+    bool loadAscii(const std::string &filename) override;
+    bool saveAscii(const std::string &filename) const override;
 
     int getMaxColorValue() const { return maxColorValue; }
 };

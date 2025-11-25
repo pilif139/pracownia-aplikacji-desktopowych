@@ -13,8 +13,10 @@ public:
     PGMImage(int w, int h, int maxVal = 255);
     ~PGMImage() override;
 
-    bool load(const std::string& filename) override;
-    bool save(const std::string& filename) const override;
+    bool loadBinary(const std::string& filename) override;
+    bool saveBinary(const std::string& filename) const override;
+    bool loadAscii(const std::string& filename) override;
+    bool saveAscii(const std::string& filename) const override;
 
     int getMaxGrayValue() const { return maxGrayValue; }
 };

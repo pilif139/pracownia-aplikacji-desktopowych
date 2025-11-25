@@ -6,9 +6,11 @@
 #define ZADANIE05_11_IMAGE_H
 
 #include <string>
+#include <cstdint>
 #define ColorValue uint8_t
 
-class Image {
+class Image
+{
 protected:
     unsigned int width = 0;
     unsigned int height = 0;
@@ -21,13 +23,14 @@ public:
     virtual ~Image() = default;
 
     // Pure virtual methods that derived classes must implement
-    virtual bool load(const std::string& filename) = 0;
-    virtual bool save(const std::string& filename) const = 0;
+    virtual bool loadBinary(const std::string &filename) = 0;
+    virtual bool saveBinary(const std::string &filename) const = 0;
+    virtual bool loadAscii(const std::string &filename) = 0;
+    virtual bool saveAscii(const std::string &filename) const = 0;
 
-    ColorValue** getData() const { return data; }
+    ColorValue **getData() const { return data; }
     unsigned int getWidth() const { return width; }
     unsigned int getHeight() const { return height; }
 };
 
-
-#endif //ZADANIE05_11_IMAGE_H
+#endif // ZADANIE05_11_IMAGE_H

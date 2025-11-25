@@ -10,9 +10,11 @@ public:
     PBMImage(int w, int h);
     ~PBMImage() override;
 
-    // Override virtual methods from Image base class (uses binary P4 format)
-    bool load(const std::string& filename) override;
-    bool save(const std::string& filename) const override;
+    // Override virtual methods from Image base class
+    bool loadBinary(const std::string& filename) override;
+    bool saveBinary(const std::string& filename) const override;
+    bool loadAscii(const std::string& filename) override;
+    bool saveAscii(const std::string& filename) const override;
 };
 
 

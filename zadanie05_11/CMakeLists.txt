@@ -4,7 +4,8 @@ project(zadanie05_11 VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Switch to Widgets-based application instead of QML/Quick
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 find_package(Qt6 REQUIRED COMPONENTS Widgets Core Charts)
 
 qt_standard_project_setup(REQUIRES 6.8)

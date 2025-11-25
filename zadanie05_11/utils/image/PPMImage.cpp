@@ -29,7 +29,7 @@ static bool isCommentOrEmpty(const std::string &line) {
     return true;
 }
 
-bool PPMImage::load(const std::string& filename) {
+bool PPMImage::loadBinary(const std::string& filename) {
     std::ifstream file(filename, std::ios::binary);
     if (!file.is_open()) return false;
     std::string line;
@@ -79,7 +79,7 @@ bool PPMImage::load(const std::string& filename) {
     return true;
 }
 
-bool PPMImage::save(const std::string& filename) const {
+bool PPMImage::saveBinary(const std::string& filename) const {
     std::ofstream file(filename, std::ios::binary);
     if (!file.is_open() || !data) return false;
     file << "P6\n";
@@ -91,4 +91,68 @@ bool PPMImage::save(const std::string& filename) const {
     return true;
 }
 
+bool PPMImage::loadAscii(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) return false;
+    std::string line;
 
+    std::getline(file, line);
+    if (line != "P3") return false;
+
+    int newWidth = 0, newHeight = 0, newMax = 255;
+    do {
+        if (!std::getline(file, line)) return false;
+    } while (isCommentOrEmpty(line));
+    std::istringstream iss(line);
+    if (!(iss >> newWidth >> newHeight)) {
+        std::string rest;
+        while (iss >> rest) {
+        }
+        if (!(file >> newWidth >> newHeight)) return false;
+    }
+    if (!(file >> newMax)) return false;
+    file.get();
+
+    // cleanup image loaded before
+    unsigned char **oldData = data;
+    int oldHeight = height;
+    if (oldData) {
+        for (int r = 0; r < oldHeight; ++r) delete[] oldData[r];
+        delete[] oldData;
+        data = nullptr;
+    }
+
+    width = newWidth;
+    height = newHeight;
+    maxColorValue = newMax;
+
+    data = new unsigned char*[height];
+    for (int i = 0; i < height; ++i) {
+        data[i] = new unsigned char[width * 3];
+    }
+
+    int val;
+    int idx = 0;
+    const int expected = width * height * 3;
+    while (idx < expected && (file >> val)) {
+        int row = idx / (width * 3);
+        int col = idx % (width * 3);
+        data[row][col] = static_cast<unsigned char>(val);
+        ++idx;
+    }
+    return (idx == expected);
+}
+
+bool PPMImage::saveAscii(const std::string& filename) const {
+    std::ofstream file(filename);
+    if (!file.is_open() || !data) return false;
+    file << "P3\n";
+    file << width << " " << height << "\n";
+    file << maxColorValue << "\n";
+    for (int i = 0; i < height; ++i) {
+        for (int j = 0; j < width * 3; ++j) {
+            file << static_cast<int>(data[i][j]) << (((j + 1) % (width * 3) == 0) ? "\n" : " ");
+        }
+    }
+    return true;
+}

@@ -7,7 +7,7 @@ PGMImage::PGMImage() : Image(), maxGrayValue(255) {}
 PGMImage::PGMImage(int w, int h, int maxVal) : Image(w, h), maxGrayValue(maxVal) {
     data = new ColorValue*[height];
     for (unsigned int i = 0; i < height; ++i) {
-        data[i] = new ColorValue[width](); // Only 1 byte per pixel for grayscale
+        data[i] = new ColorValue[width]();
     }
 }
 
@@ -29,7 +29,7 @@ static bool isCommentOrEmpty(const std::string &line) {
     return true;
 }
 
-bool PGMImage::load(const std::string& filename) {
+bool PGMImage::loadBinary(const std::string& filename) {
     std::ifstream file(filename, std::ios::binary);
     if (!file.is_open()) return false;
 
@@ -39,7 +39,6 @@ bool PGMImage::load(const std::string& filename) {
 
     int newWidth = 0, newHeight = 0, newMax = 255;
 
-    // Read width and height (skip comments)
     do {
         if (!std::getline(file, line)) return false;
     } while (isCommentOrEmpty(line));
@@ -49,12 +48,10 @@ bool PGMImage::load(const std::string& filename) {
         if (!(file >> newWidth >> newHeight)) return false;
     }
 
-    // Read max gray value
     if (!(file >> newMax)) return false;
     if (newMax <= 0 || newMax >= 65536) return false;
-    file.get(); // Skip single whitespace after maxval
+    file.get();
 
-    // Cleanup old image data
     ColorValue **oldData = data;
     unsigned int oldHeight = height;
     if (oldData) {
@@ -67,16 +64,12 @@ bool PGMImage::load(const std::string& filename) {
     height = newHeight;
     maxGrayValue = newMax;
 
-    // Allocate new data (1 byte per pixel for grayscale)
     data = new ColorValue*[height];
     for (unsigned int i = 0; i < height; ++i) {
         data[i] = new ColorValue[width];
     }
 
-    // Read pixel data
-    // If maxval < 256, each pixel is 1 byte, otherwise 2 bytes
     if (maxGrayValue < 256) {
-        // 1 byte per pixel
         for (unsigned int r = 0; r < height; ++r) {
             file.read(reinterpret_cast<char*>(data[r]), width);
             if (!file) {
@@ -88,7 +81,6 @@ bool PGMImage::load(const std::string& filename) {
             }
         }
     } else {
-        // 2 bytes per pixel (most significant byte first)
         for (unsigned int r = 0; r < height; ++r) {
             for (unsigned int c = 0; c < width; ++c) {
                 unsigned char byte1, byte2;
@@ -101,7 +93,6 @@ bool PGMImage::load(const std::string& filename) {
                     width = height = 0;
                     return false;
                 }
-                // Combine two bytes (MSB first) and scale to 8-bit
                 unsigned int value = (byte1 << 8) | byte2;
                 data[r][c] = static_cast<ColorValue>((value * 255) / maxGrayValue);
             }
@@ -111,7 +102,7 @@ bool PGMImage::load(const std::string& filename) {
     return true;
 }
 
-bool PGMImage::save(const std::string& filename) const {
+bool PGMImage::saveBinary(const std::string& filename) const {
     std::ofstream file(filename, std::ios::binary);
     if (!file.is_open() || !data) return false;
 
@@ -119,18 +110,13 @@ bool PGMImage::save(const std::string& filename) const {
     file << width << " " << height << "\n";
     file << maxGrayValue << "\n";
 
-    // Write pixel data
-    // If maxval < 256, each pixel is 1 byte, otherwise 2 bytes
     if (maxGrayValue < 256) {
-        // 1 byte per pixel
         for (unsigned int i = 0; i < height; ++i) {
             file.write(reinterpret_cast<const char*>(data[i]), width);
         }
     } else {
-        // 2 bytes per pixel (most significant byte first)
         for (unsigned int i = 0; i < height; ++i) {
             for (unsigned int j = 0; j < width; ++j) {
-                // Scale 8-bit value to maxGrayValue range and write as 2 bytes
                 unsigned int value = (data[i][j] * maxGrayValue) / 255;
                 unsigned char byte1 = (value >> 8) & 0xFF; // MSB
                 unsigned char byte2 = value & 0xFF;        // LSB
@@ -138,6 +124,93 @@ bool PGMImage::save(const std::string& filename) const {
                 file.write(reinterpret_cast<const char*>(&byte2), 1);
             }
         }
+    }
+
+    return true;
+}
+
+bool PGMImage::loadAscii(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) return false;
+
+    std::string line;
+    std::getline(file, line);
+    if (line != "P2") return false;
+
+    int newWidth = 0, newHeight = 0, newMax = 255;
+
+    do {
+        if (!std::getline(file, line)) return false;
+    } while (isCommentOrEmpty(line));
+
+    std::istringstream iss(line);
+    if (!(iss >> newWidth >> newHeight)) {
+        if (!(file >> newWidth >> newHeight)) return false;
+    }
+
+    if (!(file >> newMax)) return false;
+    if (newMax <= 0 || newMax >= 65536) return false;
+
+    ColorValue **oldData = data;
+    unsigned int oldHeight = height;
+    if (oldData) {
+        for (unsigned int r = 0; r < oldHeight; ++r) delete[] oldData[r];
+        delete[] oldData;
+        data = nullptr;
+    }
+
+    width = newWidth;
+    height = newHeight;
+    maxGrayValue = newMax;
+
+    data = new ColorValue*[height];
+    for (unsigned int i = 0; i < height; ++i) {
+        data[i] = new ColorValue[width];
+    }
+
+    int val;
+    for (unsigned int r = 0; r < height; ++r) {
+        for (unsigned int c = 0; c < width; ++c) {
+            if (!(file >> val)) {
+                for (unsigned int k = 0; k < height; ++k) delete[] data[k];
+                delete[] data;
+                data = nullptr;
+                width = height = 0;
+                return false;
+            }
+            if (maxGrayValue == 255) {
+                data[r][c] = static_cast<ColorValue>(val);
+            } else {
+                data[r][c] = static_cast<ColorValue>((val * 255) / maxGrayValue);
+            }
+        }
+    }
+
+    return true;
+}
+
+bool PGMImage::saveAscii(const std::string& filename) const {
+    std::ofstream file(filename);
+    if (!file.is_open() || !data) return false;
+
+    file << "P2\n";
+    file << width << " " << height << "\n";
+    file << maxGrayValue << "\n";
+
+    for (unsigned int i = 0; i < height; ++i) {
+        for (unsigned int j = 0; j < width; ++j) {
+            int val;
+            if (maxGrayValue == 255) {
+                val = static_cast<int>(data[i][j]);
+            } else {
+                val = (static_cast<int>(data[i][j]) * maxGrayValue) / 255;
+            }
+            file << val;
+            if (j < width - 1) {
+                file << " ";
+            }
+        }
+        file << "\n";
     }
 
     return true;
