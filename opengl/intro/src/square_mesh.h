@@ -9,6 +9,7 @@ public:
     ~SquareMesh();
     void draw();
     void loadTexture(const std::string& path);
+    void bindTextures();
 
 private:
     unsigned int VAO, VBO, EBO;

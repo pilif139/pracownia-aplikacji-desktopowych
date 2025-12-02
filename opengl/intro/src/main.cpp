@@ -1,7 +1,13 @@
 #include "config.h"
+#include "GLFW/glfw3.h"
+#include "glm/ext/matrix_transform.hpp"
+#include "glm/trigonometric.hpp"
 #include "shader.h"
 #include "square_mesh.h"
 // #include "triangle_mesh.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 unsigned int make_module(const std::string &filepath, unsigned int module_type)
 {
@@ -63,10 +69,17 @@ unsigned int make_shader(const std::string &vertex_filepath, const std::string &
     return shader;
 }
 
+float mixValue = 0.2f;
+
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+        mixValue += 0.01f;
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+        mixValue -= 0.01f;
+    mixValue = std::max(0.0f, std::min(1.0f, mixValue));
 }
 
 int main()
@@ -116,6 +129,9 @@ int main()
 
     Shader shader(getPath("./src/shaders/textureVertex.glsl").c_str(), getPath("./src/shaders/textureFragment.glsl").c_str());
 
+    shader.use();
+    shader.setInt("texture1", 0);
+    shader.setInt("texture2", 1);
     // uncomment this call to draw in wireframe polygons.
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     int nrAttributes;
@@ -123,27 +139,54 @@ int main()
     std::cout << "Maximum number of vertex attributes supported: " << nrAttributes << std::endl;
 
     float xOffset = 0.0f;
-    int direction = 1;
+    float yOffset = 0.0f;
+    // int yDirection = 1;
+    // int xDirection = 1;
     while (!glfwWindowShouldClose(window))
     {
-        if(xOffset > 0.5f){
-            direction = -1;
-        } else if (xOffset < -0.5f) {
-            direction = 1;
-        }
-        xOffset += 0.02f * direction;
+        // if(xOffset > 0.5f){
+        //     xDirection = -1;
+        // } else if (xOffset < -0.5f) {
+        //     xDirection = 1;
+        // }
+        // if(yOffset > 0.5f){
+        //     yDirection = -1;
+        // } else if (yOffset < -0.5f) {
+        //     yDirection = 1;
+        // }
+        // xOffset += 0.001f * xDirection;
+        // yOffset += 0.0005f * yDirection;
+
+        glm::mat4 trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+        trans = glm::rotate(trans, static_cast<float>(glfwGetTime()), glm::vec3(0.0f, 0.0f, 1.0f));
+
         glfwPollEvents();
 
         processInput(window);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        square->bindTextures();
         shader.use();
+        shader.setInt("texture1", 0);
         shader.setInt("texture2", 1);
-        // shader.setFloat("xOffset", xOffset);
+        shader.setFloat("mixFactor", mixValue);
+        shader.setFloat("xOffset", xOffset);
+        shader.setFloat("yOffset", yOffset);
+        unsigned int transformLoc = glGetUniformLocation(shader.ID, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
         // float timeValue = glfwGetTime();
         // float greenValue = sin(timeValue)/2 + 0.5f;
         // shader.setVec3("color", greenValue -0.5f, greenValue, greenValue -0.5f);
         // triangle->draw();
         square->draw();
+
+        trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
+        float scaleValue = static_cast<float>(glm::abs(glm::sin(glfwGetTime())));
+        trans = glm::scale(trans, glm::vec3(scaleValue, scaleValue, scaleValue));
+        glUniformMatrix4fv(transformLoc,1, GL_FALSE, &trans[0][0]);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
     }
