@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     imageLabel->setScaledContents(true);
 
     scrollArea = new QScrollArea(this);
-    scrollArea->setBackgroundRole(QPalette::Dark);
+    scrollArea->setBackgroundRole(QPalette::Base);
     scrollArea->setWidget(imageLabel);
     setCentralWidget(scrollArea);
     scrollArea->setAlignment(Qt::AlignCenter);

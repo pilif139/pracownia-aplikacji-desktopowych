@@ -23,6 +23,7 @@ private slots:
     void onLinearContrastSelected();
     void onLogContrastSelected();
     void onExpContrastSelected();
+    void onSaturationSelected();
 
 private:
     FileHandler *fileHandler;

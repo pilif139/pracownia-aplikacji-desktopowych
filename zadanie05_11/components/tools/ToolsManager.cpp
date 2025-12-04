@@ -3,6 +3,7 @@
 #include "GrayscaleDialog.h"
 #include "DesaturateDialog.h"
 #include "InvertDialog.h"
+#include "SaturationDialog.h"
 #include "contrast/LinearContrastDialog.h"
 #include "contrast/LogContrastDialog.h"
 #include "contrast/ExpContrastDialog.h"
@@ -22,6 +23,10 @@ void ToolsManager::populateMenu(QMenu *toolsMenu) {
     auto *invert = new QAction(tr("Invert Colors"), this);
     connect(invert, &QAction::triggered, this, &ToolsManager::onInvertSelected);
     toolsMenu->addAction(invert);
+
+    auto *saturation = new QAction(tr("Change Saturation"), this);
+    connect(saturation, &QAction::triggered, this, &ToolsManager::onSaturationSelected);
+    toolsMenu->addAction(saturation);
 
     toolsMenu->addSeparator();
 
@@ -145,5 +150,21 @@ void ToolsManager::onExpContrastSelected() {
         emit imageModified(true, tr("Exponential contrast applied successfully."));
     } else {
         emit imageModified(true, tr("Exponential contrast adjustment canceled."));
+    }
+}
+
+void ToolsManager::onSaturationSelected() {
+    if (!fileHandler) {
+        emit imageModified(false, tr("No file handler available."));
+        return;
+    }
+    SaturationDialog dialog(fileHandler, parentWidget);
+    connect(&dialog, &SaturationDialog::previewUpdated, [this]() {
+        emit imageModified(true, tr("Image preview updated."));
+    });
+    if (dialog.exec() == QDialog::Accepted) {
+        emit imageModified(true, tr("Image saturation changed successfully."));
+    } else {
+        emit imageModified(true, tr("Image saturation change canceled."));
     }
 }
