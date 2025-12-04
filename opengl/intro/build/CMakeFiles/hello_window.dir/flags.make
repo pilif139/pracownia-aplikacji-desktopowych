@@ -3,15 +3,19 @@
 
 # compile C with /usr/bin/cc
 # compile CXX with /usr/bin/c++
-C_DEFINES = -DPROJECT_ROOT=\"/home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro\"
+C_DEFINES = -DPROJECT_ROOT=\"/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro\"
 
-C_INCLUDES = -I/home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/dependencies
+C_INCLUDES = -I/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/dependencies -isystem /opt/homebrew/include -iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
 
-C_FLAGS = 
+C_FLAGSarm64 =  -arch arm64
 
-CXX_DEFINES = -DPROJECT_ROOT=\"/home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro\"
+C_FLAGS =  -arch arm64
 
-CXX_INCLUDES = -I/home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/dependencies
+CXX_DEFINES = -DPROJECT_ROOT=\"/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro\"
 
-CXX_FLAGS = -std=gnu++20
+CXX_INCLUDES = -I/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/dependencies -isystem /opt/homebrew/include -iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
+
+CXX_FLAGSarm64 = -std=gnu++20 -arch arm64
+
+CXX_FLAGS = -std=gnu++20 -arch arm64
 

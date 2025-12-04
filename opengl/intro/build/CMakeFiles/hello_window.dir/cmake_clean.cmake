@@ -1,5 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/hello_window.dir/link.d"
   "CMakeFiles/hello_window.dir/src/cube_mesh.cpp.o"
   "CMakeFiles/hello_window.dir/src/cube_mesh.cpp.o.d"
   "CMakeFiles/hello_window.dir/src/glad.c.o"

@@ -1,7 +1,7 @@
 {
 	"InstallScripts" : 
 	[
-		"/home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build/cmake_install.cmake"
+		"/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build/cmake_install.cmake"
 	],
 	"Parallel" : false
 }
