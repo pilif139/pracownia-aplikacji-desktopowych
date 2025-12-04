@@ -1,7 +1,6 @@
 #include "square_mesh.h"
 #include <glad/glad.h>
 #include <iostream>
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 SquareMesh::SquareMesh()

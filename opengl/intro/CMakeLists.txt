@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(hello_window VERSION 1.0.0)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 ADD_COMPILE_DEFINITIONS(PROJECT_ROOT="${CMAKE_SOURCE_DIR}")
 
@@ -15,6 +16,8 @@ add_executable(hello_window
     src/triangle_mesh.cpp
     src/square_mesh.cpp
     src/shader.cpp
+    src/cube_mesh.cpp
+    src/stb_image.cpp
 )
 
 target_include_directories(hello_window PRIVATE dependencies)

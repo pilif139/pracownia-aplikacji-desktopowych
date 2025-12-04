@@ -48,19 +48,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /opt/homebrew/bin/cmake
+CMAKE_COMMAND = /usr/local/bin/cmake
 
 # The command to remove a file.
-RM = /opt/homebrew/bin/cmake -E rm -f
+RM = /usr/local/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro
+CMAKE_SOURCE_DIR = /home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build
+CMAKE_BINARY_DIR = /home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -68,7 +68,7 @@ CMAKE_BINARY_DIR = /Users/filip/programming/pracownia-aplikacji-desktopowych/ope
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
-	/opt/homebrew/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/local/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -78,7 +78,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake to regenerate build system..."
-	/opt/homebrew/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/local/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build/CMakeFiles /Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build/CMakeFiles /home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -128,6 +128,30 @@ hello_window: cmake_check_build_system
 hello_window/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/build
 .PHONY : hello_window/fast
+
+src/cube_mesh.o: src/cube_mesh.cpp.o
+.PHONY : src/cube_mesh.o
+
+# target to build an object file
+src/cube_mesh.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/src/cube_mesh.cpp.o
+.PHONY : src/cube_mesh.cpp.o
+
+src/cube_mesh.i: src/cube_mesh.cpp.i
+.PHONY : src/cube_mesh.i
+
+# target to preprocess a source file
+src/cube_mesh.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/src/cube_mesh.cpp.i
+.PHONY : src/cube_mesh.cpp.i
+
+src/cube_mesh.s: src/cube_mesh.cpp.s
+.PHONY : src/cube_mesh.s
+
+# target to generate assembly for a file
+src/cube_mesh.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/src/cube_mesh.cpp.s
+.PHONY : src/cube_mesh.cpp.s
 
 src/glad.o: src/glad.c.o
 .PHONY : src/glad.o
@@ -225,6 +249,30 @@ src/square_mesh.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/src/square_mesh.cpp.s
 .PHONY : src/square_mesh.cpp.s
 
+src/stb_image.o: src/stb_image.cpp.o
+.PHONY : src/stb_image.o
+
+# target to build an object file
+src/stb_image.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/src/stb_image.cpp.o
+.PHONY : src/stb_image.cpp.o
+
+src/stb_image.i: src/stb_image.cpp.i
+.PHONY : src/stb_image.i
+
+# target to preprocess a source file
+src/stb_image.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/src/stb_image.cpp.i
+.PHONY : src/stb_image.cpp.i
+
+src/stb_image.s: src/stb_image.cpp.s
+.PHONY : src/stb_image.s
+
+# target to generate assembly for a file
+src/stb_image.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_window.dir/build.make CMakeFiles/hello_window.dir/src/stb_image.cpp.s
+.PHONY : src/stb_image.cpp.s
+
 src/triangle_mesh.o: src/triangle_mesh.cpp.o
 .PHONY : src/triangle_mesh.o
 
@@ -258,6 +306,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... hello_window"
+	@echo "... src/cube_mesh.o"
+	@echo "... src/cube_mesh.i"
+	@echo "... src/cube_mesh.s"
 	@echo "... src/glad.o"
 	@echo "... src/glad.i"
 	@echo "... src/glad.s"
@@ -270,6 +321,9 @@ help:
 	@echo "... src/square_mesh.o"
 	@echo "... src/square_mesh.i"
 	@echo "... src/square_mesh.s"
+	@echo "... src/stb_image.o"
+	@echo "... src/stb_image.i"
+	@echo "... src/stb_image.s"
 	@echo "... src/triangle_mesh.o"
 	@echo "... src/triangle_mesh.i"
 	@echo "... src/triangle_mesh.s"

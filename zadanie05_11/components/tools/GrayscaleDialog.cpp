@@ -8,6 +8,8 @@
 #include <QColor>
 #include <cmath>
 
+double GrayscaleDialog::lastDesaturationValue = 0.0;
+
 GrayscaleDialog::GrayscaleDialog(FileHandler *file_handler, QWidget *parent)
     : QDialog(parent),
       fileHandler(file_handler),
@@ -18,7 +20,7 @@ GrayscaleDialog::GrayscaleDialog(FileHandler *file_handler, QWidget *parent)
     setWindowTitle(tr("Change brightness"));
 
     slider->setRange(0, 100);
-    slider->setValue(0);
+    slider->setValue(static_cast<int>(lastDesaturationValue * 100));  // Use remembered value
     slider->setMinimumWidth(200);
     valueLabel->setText(QString("%1%").arg(slider->value()));
 
@@ -48,7 +50,13 @@ GrayscaleDialog::GrayscaleDialog(FileHandler *file_handler, QWidget *parent)
 
     QTimer::singleShot(0, this, [this]()
                        { if (slider) slider->setFocus(); });
+
+    if (lastDesaturationValue > 0.0)
+    {
+        applyFactorToHandler(lastDesaturationValue);
+    }
 }
+
 GrayscaleDialog::~GrayscaleDialog()
 {
     if (fileHandler)
@@ -92,6 +100,8 @@ void GrayscaleDialog::onSliderChanged(int value)
 
 void GrayscaleDialog::onAccepted()
 {
+    // Remember the desaturation value for next time
+    lastDesaturationValue = slider->value() / 100.0;
     fileHandler->deleteBackup();
     accept();
 }
@@ -104,7 +114,7 @@ void GrayscaleDialog::onRejected()
     reject();
 }
 
-double GrayscaleDialog::desaturationValue() const
+double GrayscaleDialog::desaturationValue()
 {
-    return slider ? (slider->value() / 100.0) : 0.0;
+    return lastDesaturationValue;
 }

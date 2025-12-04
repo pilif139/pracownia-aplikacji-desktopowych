@@ -1,3 +1,3 @@
-/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build/CMakeFiles/hello_window.dir
-/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build/CMakeFiles/edit_cache.dir
-/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build/CMakeFiles/rebuild_cache.dir
+/home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build/CMakeFiles/hello_window.dir
+/home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build/CMakeFiles/edit_cache.dir
+/home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/build/CMakeFiles/rebuild_cache.dir

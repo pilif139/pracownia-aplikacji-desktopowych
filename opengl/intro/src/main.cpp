@@ -3,83 +3,30 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/trigonometric.hpp"
 #include "shader.h"
-#include "square_mesh.h"
+// #include "square_mesh.h"
 // #include "triangle_mesh.h"
+#include "cube_mesh.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-unsigned int make_module(const std::string &filepath, unsigned int module_type)
-{
-    std::ifstream file;
-    std::stringstream bufferedLines;
-    std::string line;
-
-    file.open(filepath);
-    while (std::getline(file, line))
-    {
-        bufferedLines << line << "\n";
-    }
-    std::string shaderSource = bufferedLines.str();
-    const char *shaderSrc = shaderSource.c_str();
-    bufferedLines.str("");
-    file.close();
-
-    unsigned int shaderModule = glCreateShader(module_type);
-    glShaderSource(shaderModule, 1, &shaderSrc, NULL);
-    glCompileShader(shaderModule);
-
-    int success;
-    glGetShaderiv(shaderModule, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        char errorLog[1024];
-        glGetShaderInfoLog(shaderModule, 1024, NULL, errorLog);
-        std::cout << "Shader Module compilation error:\n " << errorLog << std::endl;
-    }
-
-    return shaderModule;
-}
-
-unsigned int make_shader(const std::string &vertex_filepath, const std::string &fragment_filepath)
-{
-    std::vector<unsigned int> modules;
-    modules.push_back(make_module(vertex_filepath, GL_VERTEX_SHADER));
-    modules.push_back(make_module(fragment_filepath, GL_FRAGMENT_SHADER));
-
-    unsigned int shader = glCreateProgram();
-    for (unsigned int module : modules)
-    {
-        glAttachShader(shader, module);
-    }
-    glLinkProgram(shader);
-    int success;
-    glGetProgramiv(shader, GL_LINK_STATUS, &success);
-    if (!success)
-    {
-        char errorLog[1024];
-        glGetProgramInfoLog(shader, 1024, NULL, errorLog);
-        std::cout << "Shader linking error:\n " << errorLog << std::endl;
-    }
-
-    for (unsigned int module : modules)
-    {
-        glDeleteShader(module);
-    }
-    return shader;
-}
-
 float mixValue = 0.2f;
+float fov = 45.0f;
 
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
+        fov += 1.0f;
         mixValue += 0.01f;
-    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    }
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
         mixValue -= 0.01f;
+        fov -= 1.0f;
+    }
     mixValue = std::max(0.0f, std::min(1.0f, mixValue));
+    // fov = std::max(1.0f, std::min(179.0f, fov));
 }
 
 int main()
@@ -118,16 +65,20 @@ int main()
     }
 
     glClearColor(0.0f, 0.1f, 0.1f, 0.1f);
+    glEnable(GL_DEPTH_TEST);
     // int w, h;
     // glfwGetFramebufferSize(window, &w, &h);
     // glViewport(0, 0, 200, 200);
 
     // TriangleMesh *triangle = new TriangleMesh();
-    SquareMesh *square = new SquareMesh();
-    square->loadTexture(getPath("./assets/wall.jpg"));
-    square->loadTexture(getPath("./assets/awesomeface.png"));
+    // SquareMesh *square = new SquareMesh();
+    // square->loadTexture(getPath("./assets/wall.jpg"));
+    // square->loadTexture(getPath("./assets/awesomeface.png"));
+    CubeMesh *cube = new CubeMesh();
+    cube->loadTexture(getPath("./assets/wall.jpg"));
+    cube->loadTexture(getPath("./assets/awesomeface.png"));
 
-    Shader shader(getPath("./src/shaders/textureVertex.glsl").c_str(), getPath("./src/shaders/textureFragment.glsl").c_str());
+    Shader shader(getPath("./src/shaders/cube.vert").c_str(), getPath("./src/shaders/cube.frag").c_str());
 
     shader.use();
     shader.setInt("texture1", 0);
@@ -142,6 +93,20 @@ int main()
     float yOffset = 0.0f;
     // int yDirection = 1;
     // int xDirection = 1;
+
+    glm::vec3 cubePositions[] = {
+        glm::vec3(0.0f,  0.0f,  0.0f),
+        glm::vec3(2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3(2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3(1.3f, -2.0f, -2.5f),
+        glm::vec3(1.5f,  2.0f, -2.5f),
+        glm::vec3(1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
+
     while (!glfwWindowShouldClose(window))
     {
         // if(xOffset > 0.5f){
@@ -161,12 +126,17 @@ int main()
         trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
         trans = glm::rotate(trans, static_cast<float>(glfwGetTime()), glm::vec3(0.0f, 0.0f, 1.0f));
 
+        glm::mat4 view = glm::mat4(1.0f);
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+        glm::mat4 projection;
+        projection = glm::perspective(glm::radians(fov), 10.0f / 10.0f, 0.1f, 100.0f);
+
         glfwPollEvents();
-
         processInput(window);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        square->bindTextures();
+        cube->bindTextures();
         shader.use();
         shader.setInt("texture1", 0);
         shader.setInt("texture2", 1);
@@ -175,23 +145,43 @@ int main()
         shader.setFloat("yOffset", yOffset);
         unsigned int transformLoc = glGetUniformLocation(shader.ID, "transform");
         glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
+        unsigned int viewLoc = glGetUniformLocation(shader.ID, "view");
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        unsigned int projectionLoc = glGetUniformLocation(shader.ID, "projection");
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+        cube->bindVAO();
+        for(unsigned int i=0; i<10; i++){
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, cubePositions[i]);
+
+            float angle = 35.0f * (i % 2 ? 1.0f : -1.0f);
+            model = glm::rotate(model,static_cast<float>(glfwGetTime()) * glm::radians(angle), glm::vec3(1.0f, 0.5f, 0.5f));
+
+            unsigned int modelLoc = glGetUniformLocation(shader.ID, "model");
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+            cube->draw();
+        }
+
         // float timeValue = glfwGetTime();
         // float greenValue = sin(timeValue)/2 + 0.5f;
         // shader.setVec3("color", greenValue -0.5f, greenValue, greenValue -0.5f);
         // triangle->draw();
-        square->draw();
+        // square->draw();
 
-        trans = glm::mat4(1.0f);
-        trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
-        float scaleValue = static_cast<float>(glm::abs(glm::sin(glfwGetTime())));
-        trans = glm::scale(trans, glm::vec3(scaleValue, scaleValue, scaleValue));
-        glUniformMatrix4fv(transformLoc,1, GL_FALSE, &trans[0][0]);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        // trans = glm::mat4(1.0f);
+        // trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
+        // float scaleValue = static_cast<float>(glm::abs(glm::sin(glfwGetTime())));
+        // trans = glm::scale(trans, glm::vec3(scaleValue, scaleValue, scaleValue));
+        // glUniformMatrix4fv(transformLoc,1, GL_FALSE, &trans[0][0]);
+        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);  // CubeMesh doesn't have an EBO!
 
         glfwSwapBuffers(window);
     }
 
-    delete square;
+    delete cube;
     // delete triangle;
     glfwTerminate();
     return 0;

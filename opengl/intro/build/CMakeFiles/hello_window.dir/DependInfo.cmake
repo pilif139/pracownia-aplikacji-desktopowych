@@ -8,11 +8,14 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/glad.c" "CMakeFiles/hello_window.dir/src/glad.c.o" "gcc" "CMakeFiles/hello_window.dir/src/glad.c.o.d"
-  "/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/main.cpp" "CMakeFiles/hello_window.dir/src/main.cpp.o" "gcc" "CMakeFiles/hello_window.dir/src/main.cpp.o.d"
-  "/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/shader.cpp" "CMakeFiles/hello_window.dir/src/shader.cpp.o" "gcc" "CMakeFiles/hello_window.dir/src/shader.cpp.o.d"
-  "/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/square_mesh.cpp" "CMakeFiles/hello_window.dir/src/square_mesh.cpp.o" "gcc" "CMakeFiles/hello_window.dir/src/square_mesh.cpp.o.d"
-  "/Users/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/triangle_mesh.cpp" "CMakeFiles/hello_window.dir/src/triangle_mesh.cpp.o" "gcc" "CMakeFiles/hello_window.dir/src/triangle_mesh.cpp.o.d"
+  "/home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/glad.c" "CMakeFiles/hello_window.dir/src/glad.c.o" "gcc" "CMakeFiles/hello_window.dir/src/glad.c.o.d"
+  "/home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/cube_mesh.cpp" "CMakeFiles/hello_window.dir/src/cube_mesh.cpp.o" "gcc" "CMakeFiles/hello_window.dir/src/cube_mesh.cpp.o.d"
+  "/home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/main.cpp" "CMakeFiles/hello_window.dir/src/main.cpp.o" "gcc" "CMakeFiles/hello_window.dir/src/main.cpp.o.d"
+  "/home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/shader.cpp" "CMakeFiles/hello_window.dir/src/shader.cpp.o" "gcc" "CMakeFiles/hello_window.dir/src/shader.cpp.o.d"
+  "/home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/square_mesh.cpp" "CMakeFiles/hello_window.dir/src/square_mesh.cpp.o" "gcc" "CMakeFiles/hello_window.dir/src/square_mesh.cpp.o.d"
+  "/home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/stb_image.cpp" "CMakeFiles/hello_window.dir/src/stb_image.cpp.o" "gcc" "CMakeFiles/hello_window.dir/src/stb_image.cpp.o.d"
+  "/home/filip/programming/pracownia-aplikacji-desktopowych/opengl/intro/src/triangle_mesh.cpp" "CMakeFiles/hello_window.dir/src/triangle_mesh.cpp.o" "gcc" "CMakeFiles/hello_window.dir/src/triangle_mesh.cpp.o.d"
+  "" "hello_window" "gcc" "CMakeFiles/hello_window.dir/link.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

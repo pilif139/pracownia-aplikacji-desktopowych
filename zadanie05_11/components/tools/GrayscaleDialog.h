@@ -6,14 +6,12 @@
 #include <QDialogButtonBox>
 
 #include "../../utils/filehandler.h"
-#include "../../utils/image/Image.h"
-
 
 class GrayscaleDialog : public QDialog{
     Q_OBJECT
 public:
     explicit GrayscaleDialog(FileHandler *file_handler,QWidget *parent=nullptr);
-    double desaturationValue() const;
+    static double desaturationValue();
     ~GrayscaleDialog() override;
 
 signals:
@@ -31,6 +29,8 @@ private:
     QSlider *slider;
     QLabel *valueLabel;
     QDialogButtonBox *buttonsBox;
+
+    static double lastDesaturationValue;
 };
 
 

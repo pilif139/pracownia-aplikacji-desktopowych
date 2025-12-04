@@ -1,4 +1,7 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/hello_window.dir/link.d"
+  "CMakeFiles/hello_window.dir/src/cube_mesh.cpp.o"
+  "CMakeFiles/hello_window.dir/src/cube_mesh.cpp.o.d"
   "CMakeFiles/hello_window.dir/src/glad.c.o"
   "CMakeFiles/hello_window.dir/src/glad.c.o.d"
   "CMakeFiles/hello_window.dir/src/main.cpp.o"
@@ -7,6 +10,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/hello_window.dir/src/shader.cpp.o.d"
   "CMakeFiles/hello_window.dir/src/square_mesh.cpp.o"
   "CMakeFiles/hello_window.dir/src/square_mesh.cpp.o.d"
+  "CMakeFiles/hello_window.dir/src/stb_image.cpp.o"
+  "CMakeFiles/hello_window.dir/src/stb_image.cpp.o.d"
   "CMakeFiles/hello_window.dir/src/triangle_mesh.cpp.o"
   "CMakeFiles/hello_window.dir/src/triangle_mesh.cpp.o.d"
   "hello_window"
