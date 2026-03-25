@@ -4,6 +4,7 @@ from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import (
     QApplication,
+    QDialog,
     QLabel,
     QLineEdit,
     QMainWindow,
@@ -12,6 +13,9 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+
+from calculator_window import CalculatorMainWindow
+from customdialog import CustomDialog
 
 
 class MainWindow(QMainWindow):
@@ -33,6 +37,9 @@ class MainWindow(QMainWindow):
         self.button.clicked.connect(self.the_button_was_toggled)
         self.button.setChecked(self.button_is_checked)
 
+        self.dialogButton = QPushButton("Otworz dialog")
+        self.dialogButton.clicked.connect(self.open_dialog)
+
         self.setFixedSize(QSize(400, 300))
         self.setMinimumSize(QSize(100, 100))
         self.setMaximumSize(QSize(800, 600))
@@ -41,11 +48,16 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.label)
         layout.addWidget(self.input)
         layout.addWidget(self.button)
+        layout.addWidget(self.dialogButton)
 
         container = QWidget()
         container.setLayout(layout)
 
         self.setCentralWidget(container)
+
+    def open_dialog(self):
+        dialog = CustomDialog(self)
+        dialog.exec()
 
     def the_button_was_clicked(self):
         self.button.setText("You clicked me!")
@@ -109,7 +121,7 @@ class MainWindow(QMainWindow):
 
 app = QApplication(sys.argv)
 
-window = MainWindow()
+window = CalculatorMainWindow()
 window.show()
 
 app.exec()

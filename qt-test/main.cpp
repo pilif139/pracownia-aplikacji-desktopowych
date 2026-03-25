@@ -12,11 +12,13 @@
 #include <QtMultimedia/QAudioOutput>
 #include <QStyle>
 
-class MusicPlayer : public QMainWindow {
+class MusicPlayer : public QMainWindow
+{
     Q_OBJECT
 
 public:
-    explicit MusicPlayer(QWidget *parent = nullptr) : QMainWindow(parent) {
+    explicit MusicPlayer(QWidget *parent = nullptr) : QMainWindow(parent)
+    {
         setWindowTitle("Simple Music Player");
         setMinimumSize(600, 400);
 
@@ -80,69 +82,88 @@ public:
     }
 
 private slots:
-    void addFiles() {
+    void addFiles()
+    {
         QStringList files = QFileDialog::getOpenFileNames(
             this, "Wybierz pliki muzyczne", "",
             "Pliki audio (*.mp3 *.wav *.ogg *.flac *.m4a)");
 
-        for (const QString &file : files) {
+        for (const QString &file : files)
+        {
             auto *item = new QListWidgetItem(QFileInfo(file).fileName());
             item->setData(Qt::UserRole, file);
             playlist->addItem(item);
         }
     }
 
-    void playSelected(QListWidgetItem *item) {
+    void playSelected(QListWidgetItem *item)
+    {
         QString filepath = item->data(Qt::UserRole).toString();
         player->setSource(QUrl::fromLocalFile(filepath));
         player->play();
     }
 
-    void togglePlayPause() {
-        if (player->playbackState() == QMediaPlayer::PlayingState) {
+    void togglePlayPause()
+    {
+        if (player->playbackState() == QMediaPlayer::PlayingState)
+        {
             player->pause();
-        } else {
-            if (playlist->currentItem()) {
+        }
+        else
+        {
+            if (playlist->currentItem())
+            {
                 playSelected(playlist->currentItem());
-            } else if (playlist->count() > 0) {
+            }
+            else if (playlist->count() > 0)
+            {
                 playlist->setCurrentRow(0);
                 playSelected(playlist->item(0));
             }
         }
     }
 
-    void setVolume(int value) {
+    void setVolume(int value)
+    {
         audioOutput->setVolume(value / 100.0);
     }
 
-    void seekPosition(int position) {
+    void seekPosition(int position)
+    {
         player->setPosition(position);
     }
 
-    void updatePosition(qint64 position) {
+    void updatePosition(qint64 position)
+    {
         progressSlider->setValue(position);
         updateTimeLabel();
     }
 
-    void updateDuration(qint64 duration) {
+    void updateDuration(qint64 duration)
+    {
         progressSlider->setRange(0, duration);
         updateTimeLabel();
     }
 
-    void updateTimeLabel() {
+    void updateTimeLabel()
+    {
         qint64 pos = player->position() / 1000;
         qint64 dur = player->duration() / 1000;
         timeLabel->setText(QString("%1:%2 / %3:%4")
-            .arg(pos / 60, 2, 10, QChar('0'))
-            .arg(pos % 60, 2, 10, QChar('0'))
-            .arg(dur / 60, 2, 10, QChar('0'))
-            .arg(dur % 60, 2, 10, QChar('0')));
+                               .arg(pos / 60, 2, 10, QChar('0'))
+                               .arg(pos % 60, 2, 10, QChar('0'))
+                               .arg(dur / 60, 2, 10, QChar('0'))
+                               .arg(dur % 60, 2, 10, QChar('0')));
     }
 
-    void updatePlayButton(QMediaPlayer::PlaybackState state) {
-        if (state == QMediaPlayer::PlayingState) {
+    void updatePlayButton(QMediaPlayer::PlaybackState state)
+    {
+        if (state == QMediaPlayer::PlayingState)
+        {
             playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-        } else {
+        }
+        else
+        {
             playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
         }
     }
@@ -158,7 +179,8 @@ private:
 
 #include <QFileInfo>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     QApplication app(argc, argv);
     MusicPlayer player;
     player.show();
@@ -166,4 +188,3 @@ int main(int argc, char *argv[]) {
 }
 
 #include "main.moc"
-
