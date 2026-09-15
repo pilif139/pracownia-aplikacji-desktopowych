@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>materialy/000-odcisk.jpg</file>
+        <file>materialy/000-zdjecie.jpg</file>
+        <file>materialy/111-odcisk.jpg</file>
+        <file>materialy/111-zdjecie.jpg</file>
+        <file>materialy/333-odcisk.jpg</file>
+        <file>materialy/333-zdjecie.jpg</file>
+    </qresource>
+</RCC>
