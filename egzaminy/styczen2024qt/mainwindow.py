@@ -19,6 +19,10 @@ class MainWindow(QMainWindow):
         self.ui.okBtn.clicked.connect(self.on_btn_click)
         self.ui.numberEdit.editingFinished.connect(self.on_focus_lost)
 
+        edits = [self.ui.nameEdit, self.ui.numberEdit, self.ui.surnameEdit]
+        for edit in edits:
+            edit.setStyleSheet("background-color: azure;")
+
 
     def on_focus_lost(self):
         number = self.ui.numberEdit.text()

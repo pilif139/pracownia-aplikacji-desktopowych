@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>748</width>
+    <height>387</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Nadaj przesyłkę. PESEL: 0000000</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="0" colspan="2">
+     <widget class="QPushButton" name="sprawdzCeneBtn">
+      <property name="text">
+       <string>Sprawdź cenę</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="przesylkaImage">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="resources.qrc">:/materialy/list.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLabel" name="cena">
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Cena:</string>
+      </property>
+      <property name="scaledContents">
+       <bool>false</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>Rodzaj Przesyłki</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QRadioButton" name="pocztowkaBtn">
+         <property name="text">
+          <string>Pocztówka</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="listBtn">
+         <property name="text">
+          <string>List</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="paczkaBtn">
+         <property name="text">
+          <string>Paczka</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="4">
+     <widget class="QPushButton" name="zatwierdzBtn">
+      <property name="text">
+       <string>Zatwierdź</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2" rowspan="3" colspan="2">
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="title">
+       <string>Dane adresowe</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="sizeConstraint">
+        <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+       </property>
+       <item>
+        <widget class="QLabel" name="ulicaLabel">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Ulica z numerem</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="ulicaNrEdit"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="kodPocztowyLabel">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Kod pocztowy</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="kodPocztowyEdit"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="miastoLabel">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Miasto</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="miastoEdit"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>748</width>
+     <height>39</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

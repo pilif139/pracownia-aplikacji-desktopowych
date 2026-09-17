@@ -31,8 +31,8 @@ QMessageBox{
 	color: black;
 }
 QLineEdit, QPushButton{
-background-color: Azure;
-color: black;
+	background-color: Azure;
+    color: black;
 }
 QLabel, QPushButton, QRadioButton{
 	color: black;
@@ -45,6 +45,9 @@ QPushButton{
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <layout class="QGridLayout" name="gridLayout">
     <item row="3" column="5">
      <layout class="QGridLayout" name="gridLayout_2">
@@ -112,7 +115,7 @@ QPushButton{
       <item row="0" column="2">
        <widget class="QLineEdit" name="numberEdit">
         <property name="styleSheet">
-         <string notr="true"/>
+         <string>0</string>
         </property>
        </widget>
       </item>
@@ -213,7 +216,7 @@ QPushButton{
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>21</height>
+     <height>39</height>
     </rect>
    </property>
   </widget>

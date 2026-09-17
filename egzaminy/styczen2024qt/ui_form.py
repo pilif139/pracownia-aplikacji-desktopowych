@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.11.2
+## Created by: Qt User Interface Compiler version 6.10.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -36,8 +36,8 @@ class Ui_MainWindow(object):
 "	color: black;\n"
 "}\n"
 "QLineEdit, QPushButton{\n"
-"background-color: Azure;\n"
-"color: black;\n"
+"	background-color: Azure;\n"
+"    color: black;\n"
 "}\n"
 "QLabel, QPushButton, QRadioButton{\n"
 "	color: black;\n"
@@ -50,6 +50,7 @@ class Ui_MainWindow(object):
 "}")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+        self.centralwidget.setStyleSheet(u"")
         self.gridLayout = QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout_2 = QGridLayout()
@@ -87,7 +88,6 @@ class Ui_MainWindow(object):
 
         self.numberEdit = QLineEdit(self.centralwidget)
         self.numberEdit.setObjectName(u"numberEdit")
-        self.numberEdit.setStyleSheet(u"")
 
         self.gridLayout_2.addWidget(self.numberEdit, 0, 2, 1, 1)
 
@@ -136,7 +136,7 @@ class Ui_MainWindow(object):
 
         self.okBtn = QPushButton(self.centralwidget)
         self.okBtn.setObjectName(u"okBtn")
-        self.okBtn.setMinimumSize(QSize(400, 50))
+        self.okBtn.setMinimumSize(QSize(800, 50))
         self.okBtn.setMaximumSize(QSize(16777215, 16777215))
 
         self.gridLayout_3.addWidget(self.okBtn, 1, 0, 1, 2)
@@ -147,7 +147,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1000, 21))
+        self.menubar.setGeometry(QRect(0, 0, 1000, 39))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -165,6 +165,7 @@ class Ui_MainWindow(object):
         self.greenEyesBtn.setText(QCoreApplication.translate("MainWindow", u"zielone", None))
         self.brownEyesBtn.setText(QCoreApplication.translate("MainWindow", u"piwne", None))
         self.numberLabel.setText(QCoreApplication.translate("MainWindow", u"Numer", None))
+        self.numberEdit.setStyleSheet(QCoreApplication.translate("MainWindow", u"0", None))
         self.nameLabel.setText(QCoreApplication.translate("MainWindow", u"Imi\u0119", None))
         self.surnameLabel.setText(QCoreApplication.translate("MainWindow", u"Nazwisko", None))
         self.fingerprintImage.setText("")
