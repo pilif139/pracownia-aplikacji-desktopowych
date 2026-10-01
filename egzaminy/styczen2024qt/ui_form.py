@@ -15,18 +15,19 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QGroupBox, QLabel,
-    QLineEdit, QMainWindow, QMenuBar, QPushButton,
-    QRadioButton, QSizePolicy, QStatusBar, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QGridLayout, QGroupBox, QHBoxLayout,
+    QLabel, QLineEdit, QMainWindow, QMenuBar,
+    QPushButton, QRadioButton, QSizePolicy, QStatusBar,
+    QVBoxLayout, QWidget)
 import rc_resources
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1000, 519)
+        MainWindow.resize(1000, 400)
         MainWindow.setMinimumSize(QSize(1000, 0))
+        MainWindow.setMaximumSize(QSize(16777215, 800))
         MainWindow.setAutoFillBackground(False)
         MainWindow.setStyleSheet(u"QMainWindow{\n"
 "	background-color: CadetBlue;\n"
@@ -44,9 +45,6 @@ class Ui_MainWindow(object):
 "}\n"
 "QGroupBox{\n"
 "	color: black;\n"
-"}\n"
-"QPushButton{\n"
-"	margin: 0 150;\n"
 "}")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -88,6 +86,7 @@ class Ui_MainWindow(object):
 
         self.numberEdit = QLineEdit(self.centralwidget)
         self.numberEdit.setObjectName(u"numberEdit")
+        self.numberEdit.setMinimumSize(QSize(200, 0))
 
         self.gridLayout_2.addWidget(self.numberEdit, 0, 2, 1, 1)
 
@@ -112,42 +111,60 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addWidget(self.surnameEdit, 2, 2, 1, 1)
 
 
-        self.gridLayout.addLayout(self.gridLayout_2, 3, 5, 1, 1)
+        self.gridLayout.addLayout(self.gridLayout_2, 3, 5, 1, 3)
 
         self.gridLayout_3 = QGridLayout()
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.fingerprintImage = QLabel(self.centralwidget)
-        self.fingerprintImage.setObjectName(u"fingerprintImage")
-        self.fingerprintImage.setPixmap(QPixmap(u":/materialy/000-odcisk.jpg"))
-        self.fingerprintImage.setScaledContents(True)
-        self.fingerprintImage.setMargin(50)
-
-        self.gridLayout_3.addWidget(self.fingerprintImage, 0, 1, 1, 1)
-
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setSpacing(40)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setContentsMargins(50, -1, 50, 25)
         self.genderImage = QLabel(self.centralwidget)
         self.genderImage.setObjectName(u"genderImage")
-        self.genderImage.setMaximumSize(QSize(16777215, 16777215))
+        self.genderImage.setMaximumSize(QSize(250, 180))
         self.genderImage.setBaseSize(QSize(0, 180))
         self.genderImage.setPixmap(QPixmap(u":/materialy/000-zdjecie.jpg"))
         self.genderImage.setScaledContents(True)
-        self.genderImage.setMargin(50)
+        self.genderImage.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.genderImage.setMargin(0)
 
-        self.gridLayout_3.addWidget(self.genderImage, 0, 0, 1, 1)
+        self.horizontalLayout.addWidget(self.genderImage)
+
+        self.fingerprintImage = QLabel(self.centralwidget)
+        self.fingerprintImage.setObjectName(u"fingerprintImage")
+        self.fingerprintImage.setMaximumSize(QSize(250, 180))
+        self.fingerprintImage.setPixmap(QPixmap(u":/materialy/000-odcisk.jpg"))
+        self.fingerprintImage.setScaledContents(True)
+        self.fingerprintImage.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.fingerprintImage.setMargin(0)
+
+        self.horizontalLayout.addWidget(self.fingerprintImage)
+
+
+        self.gridLayout_3.addLayout(self.horizontalLayout, 0, 0, 1, 1)
 
         self.okBtn = QPushButton(self.centralwidget)
         self.okBtn.setObjectName(u"okBtn")
-        self.okBtn.setMinimumSize(QSize(800, 50))
-        self.okBtn.setMaximumSize(QSize(16777215, 16777215))
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.okBtn.sizePolicy().hasHeightForWidth())
+        self.okBtn.setSizePolicy(sizePolicy)
+        self.okBtn.setMinimumSize(QSize(200, 50))
+        self.okBtn.setMaximumSize(QSize(1677777, 16777215))
+        self.okBtn.setStyleSheet(u"margin: 0 80;\n"
+"\n"
+"")
 
-        self.gridLayout_3.addWidget(self.okBtn, 1, 0, 1, 2)
+        self.gridLayout_3.addWidget(self.okBtn, 1, 0, 1, 1)
 
 
-        self.gridLayout.addLayout(self.gridLayout_3, 3, 6, 1, 3)
+        self.gridLayout.addLayout(self.gridLayout_3, 3, 8, 1, 1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1000, 39))
+        self.menubar.setGeometry(QRect(0, 0, 1000, 38))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -168,8 +185,8 @@ class Ui_MainWindow(object):
         self.numberEdit.setStyleSheet(QCoreApplication.translate("MainWindow", u"0", None))
         self.nameLabel.setText(QCoreApplication.translate("MainWindow", u"Imi\u0119", None))
         self.surnameLabel.setText(QCoreApplication.translate("MainWindow", u"Nazwisko", None))
-        self.fingerprintImage.setText("")
         self.genderImage.setText("")
+        self.fingerprintImage.setText("")
         self.okBtn.setText(QCoreApplication.translate("MainWindow", u"OK", None))
     # retranslateUi
 
